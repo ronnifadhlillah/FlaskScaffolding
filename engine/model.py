@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.types import Date
 import json
 
+# define model class below
 
 def encoder_p_0(self, obj):
     if isinstance(obj.__class__, DeclarativeMeta):
