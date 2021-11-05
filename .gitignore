@@ -4,3 +4,4 @@ __pycache__
 /engine/__pycache__/
 /public/
 /temp/
+*.py

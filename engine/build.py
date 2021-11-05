@@ -30,6 +30,7 @@ def Build():
     connector=engine.DefineDriver()
     Jp(a)
     a.register_error_handler(404, page_not_found)
+    engine.init_app(a)
     return a
 
 def Jp(a):
