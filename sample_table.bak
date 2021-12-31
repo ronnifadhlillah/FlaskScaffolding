@@ -1,0 +1,30 @@
+<table id="table" class="table table-sm border" style="width:100%" border="1">
+  <thead>
+    <tr class="bg-dark text-light">
+      <th class="align-middle">No</th>
+      <th class="align-middle">First Name</th>
+      <th class="align-middle">Last Name</th>
+      <th class="align-middle">Email</th>
+      <th class="align-middle">Gender</th>
+      <th class="align-middle">IP Address</th>
+    </tr>
+  </thead>
+  <tbody>
+  {%for datas in data%}
+  {% for i in data %}
+  {% endfor %}
+  <tr>
+    <td class="align-middle">
+    {{ loop.index }}
+    </td>
+    <td class="align-middle">{{datas['first_name']}}</td>
+    <td class="align-middle">{{datas['last_name']}}</td>
+    <td class="align-middle">{{datas['email']}}</td>
+    <td class="align-middle">{{datas['gender']}}</td>
+    <td class="align-middle">{{datas['ip_address']}}</td>
+
+  </tr>
+
+  {%endfor%}
+  </tbody>
+</table>

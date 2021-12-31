@@ -7,17 +7,17 @@ import configparser
 cfg=configparser.ConfigParser()
 cfg.read("config/App.ini")
 
-def Init(test_config=None):
+def init(test_config=None):
     return Flask(cfg['Application']['AppName'],
     template_folder=cfg['BootStrap']['Template'],
     static_folder=cfg['BootStrap']['Static'],
     instance_relative_config=True)
 
-def Build():
-    a=Init()
+def build():
+    a=init()
     @a.before_request
-    def Br():
-        g=routes.Jglobal()
+    def bt():
+        g=routes.jGlobal()
         jgp=g
         for jg in jgp:
             a.jinja_env.globals[jg['key']]=jg['value']
@@ -27,14 +27,14 @@ def Build():
         if ts is None:
             return ""
         return epoch.strftime(format)
-    connector=engine.DefineDriver()
-    Jp(a)
+    connector=engine.defineDriver()
+    jp(a)
     a.register_error_handler(404, page_not_found)
     w=routes.web
     a.register_blueprint(w.bp)
     return a
 
-def Jp(a):
+def jp(a):
     if(cfg['Application']['Debug'])=="True":
         bool=True
     else:
@@ -48,7 +48,7 @@ def Jp(a):
     if cfg['URI']['Set']=="True":
         a.config['SERVER_NAME']=cfg['URI']['Url']+':'+cfg['URI']['Port']
 
-def Hook(k,v):
+def hook(k,v):
     arr={
         'key':k,
         'value':v

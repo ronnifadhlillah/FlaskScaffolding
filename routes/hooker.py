@@ -1,4 +1,4 @@
-from engine.build import Init, Hook
+from engine.build import init, hook
 import flask
 import socket
 import configparser
@@ -11,13 +11,13 @@ cfg.read('config/App.ini')
 
 # hook(key, value) --> Sample
 
-a=Init()
+a=init()
 @a.before_request
-def Jglobal():
+def jGlobal():
     arr=(
-        Hook('Locale', cfg['Application']['Locale']),
-        Hook('host', socket.gethostname()),
-        Hook('flask_v', flask.__version__),
+        hook('Locale', cfg['Application']['Locale']),
+        hook('host', socket.gethostname()),
+        hook('flask_v', flask.__version__),
         # add here for more hook
     )
     return arr
