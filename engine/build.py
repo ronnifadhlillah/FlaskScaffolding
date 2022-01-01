@@ -57,3 +57,10 @@ def hook(k,v):
 
 def page_not_found(e):
   return render_template('404.html'), 404
+
+def auth():
+    default={
+        password:'user database and pass column',
+        username:'user database and user column',
+    }
+    return default
