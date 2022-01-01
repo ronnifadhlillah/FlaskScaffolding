@@ -60,6 +60,7 @@ def page_not_found(e):
 
 def auth():
     default={
+        table:'user table',
         password:'user database and pass column',
         username:'user database and user column',
     }
