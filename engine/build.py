@@ -1,7 +1,6 @@
-from flask import Flask,render_template
+from flask import Flask,render_template,request
 import engine
 import routes
-import os
 import configparser
 
 cfg=configparser.ConfigParser()
@@ -58,10 +57,5 @@ def hook(k,v):
 def page_not_found(e):
   return render_template('404.html'), 404
 
-def auth():
-    default={
-        table:'user table',
-        password:'user database and pass column',
-        username:'user database and user column',
-    }
-    return default
+def server():
+    return request.url
