@@ -1,7 +1,6 @@
 /venv/
 __pycache__
 /config/
-/engine/__pycache__/
 /public/
 /temp/
-*.py
+/apps/

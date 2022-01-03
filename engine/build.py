@@ -57,5 +57,17 @@ def hook(k,v):
 def page_not_found(e):
   return render_template('404.html'), 404
 
-def server():
-    return request.url
+@bp.before_app_request
+def CurrentUser():
+    s=session.get('session_id')
+    if s is None:
+        return render_template('auth.jinja')
+
+def login_required(view):
+    print(view)
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('route.login'))
+        return view(**kwargs)
+    return wrapped_view
