@@ -28,9 +28,12 @@ def build():
         return epoch.strftime(format)
     connector=engine.defineDriver()
     jp(a)
-    a.register_error_handler(404, page_not_found)
+    aut=engine.auth
     w=routes.web
+    a.register_blueprint(aut.bp)
     a.register_blueprint(w.bp)
+    a.register_error_handler(404, page_not_found)
+
     return a
 
 def jp(a):
@@ -56,18 +59,3 @@ def hook(k,v):
 
 def page_not_found(e):
   return render_template('404.html'), 404
-
-@bp.before_app_request
-def CurrentUser():
-    s=session.get('session_id')
-    if s is None:
-        return render_template('auth.jinja')
-
-def login_required(view):
-    print(view)
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('route.login'))
-        return view(**kwargs)
-    return wrapped_view

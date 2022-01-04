@@ -1,64 +1,33 @@
-from flask import redirect,render_template,session,request,url_for
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import *
-import imaplib
-from engine.database import sessionLocal
+import functools
+
+from flask import g,Blueprint,render_template,session,redirect,request,url_for
+from engine import sessionLocal
 from engine.build import init
+from werkzeug.exceptions import abort
+import datetime
 
-# class authentication():
-#     def __init__(self,adapter,un,ps):
-#         strValidation(self.un,self.ps)
-#         doLogin()
-#         # build session
-#         session()
-#         # redirect template
-#         return redirect(self.temp)
+apps=init()
+bp=Blueprint('auth','FLASK SCAFFOLDING')
 
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for("auth.login"))
+        return view(**kwargs)
+    return wrapped_view
 
-def strValidation(self,un,ps):
-    # Make input value of username and password as a string.
-    # prevent sql hijacking
-    v={
-        un:"""%s""" % str(self.un),
-        ps:"""%s""" % str(self.ps)
-    }
-    return v
+@bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get("user_id")
+    if user_id is None:
+        g.user = None
 
-def doLogin(bp):
-    # login Query
-    # @bp.route('/login',methods=['POST'])
-    # def loginHandler():
-    #     return render_template('auth.jinja')
-    # q=text("""SELECT * FROM %s WHERE %s=%s AND %s=%s"""%(auth['table'],auth['username'],v['un'],auth['password'],v['ps']))
-    # r=sessionLocal.execute(q)
-    # for row in r:
-    #     print(row['username'])
-    # if row count > 1
-        # return True
-    # else:
-        # return False
-        # guard attempt
-    pass
+@bp.route("/login", methods=("GET", "POST"))
+def login():
+    return render_template("auth.jinja")
 
-def session():
-    # session maker
-    pass
-
-def guard():
-    # Three times input submit
-    return render_template(loginPage)
-    pass
-
+@bp.route("/logout")
 def logout():
-    # destroy logout session
-    pass
-
-def imapConnector(self,srv,inp):
-    # All validation must execute here.
-    try:
-        imp=imaplib.IMAP4_SSL(self.srv,port=995)
-        imp.login(self.un,self.ps)
-        return True
-    except imaplib.IMAP4.error:
-        print('Imap Conection fail. Maybe username and password is wrong.')
-        return False
+    session.clear()
+    return redirect(url_for("index"))
