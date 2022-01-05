@@ -1,5 +1,6 @@
 from sqlalchemy.ext.declarative import DeclarativeMeta,declarative_base
 import json
+import datetime
 
 # This code below is a stimulous of JSON encoder if you see an error JSON seriazible.
 
@@ -18,3 +19,11 @@ class encoder(json.JSONEncoder):
             # a json-encodable dict
             return fields
         return json.JSONEncoder.default(self, obj)
+
+
+def currentTimestamp():
+    ct=datetime.datetime.now()
+    formattedDate=ct.strftime('%d/%m/%Y %H:%M')
+    # setup=datetime.datetime.strptime(formattedDate.)
+    timestamp=datetime.datetime.timestamp(formattedDate)
+    return timestamp

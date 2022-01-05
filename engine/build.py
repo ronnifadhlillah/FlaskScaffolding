@@ -33,7 +33,6 @@ def build():
     a.register_blueprint(aut.bp)
     a.register_blueprint(w.bp)
     a.register_error_handler(404, page_not_found)
-
     return a
 
 def jp(a):
@@ -59,3 +58,8 @@ def hook(k,v):
 
 def page_not_found(e):
   return render_template('404.html'), 404
+
+def copyPat():
+    apps=init()
+    with apps.app_context():
+        return request.url

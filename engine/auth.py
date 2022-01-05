@@ -1,13 +1,13 @@
-import functools
-
 from flask import g,Blueprint,render_template,session,redirect,request,url_for
 from engine import sessionLocal
 from engine.build import init
 from werkzeug.exceptions import abort
 import datetime
+import functools
+
 
 apps=init()
-bp=Blueprint('auth','FLASK SCAFFOLDING')
+bp=Blueprint('auth',__name__)
 
 def login_required(view):
     @functools.wraps(view)
