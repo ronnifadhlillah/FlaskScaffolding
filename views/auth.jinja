@@ -2,16 +2,16 @@
 {%block content%}
 <h1>Authentication</h1>
 <div class="row">
-  <form>
+  <form method="POST">
     <table border='0'>
       <tr>
         <td><label for="username"> Username </label></td>
-        <td>: <input id="username" type="text" placeholder="Insert username" required/></td>
+        <td>: <input id="username" name="username" type="text" placeholder="Insert username" required/></td>
       </tr>
-      <tr>
+      <!--<tr>
         <td><label for="password"> Password </label></td>
         <td>: <input id="password" type="password" placeholder="Insert username" required/></td>
-      </tr>
+      </tr>-->
       <tr>
         <td colspan="2" style="text-align:right">
           <button type="submit"> Login</button>

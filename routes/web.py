@@ -20,6 +20,7 @@ def index():
     return render_template('index.html')
 
 @bp.route('/home')
+@login_required
 def home():
     print(copyPat())
     return render_template('home.html')
