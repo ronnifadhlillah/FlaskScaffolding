@@ -57,7 +57,7 @@ def hook(k,v):
     return arr
 
 def page_not_found(e):
-  return render_template('404.html'), 404
+  return render_template('404.jinja'), 404
 
 def copyPat():
     apps=init()

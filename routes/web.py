@@ -17,10 +17,10 @@ bp=Blueprint('route',__name__)
 def index():
     print(copyPat())
     # Write down query and route to page
-    return render_template('index.html')
+    return render_template('index.jinja')
 
 @bp.route('/home')
 @login_required
 def home():
     print(copyPat())
-    return render_template('home.html')
+    return render_template('home.jinja')

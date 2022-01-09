@@ -7,34 +7,21 @@ import datetime
 import functools
 import routes
 import uuid
+import configparser
 
 apps=init()
 bp=Blueprint('auth',__name__)
 
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if session['user_id'] is None:
-            return redirect(url_for("auth.login"))
-        return view(**kwargs)
-    return wrapped_view
-
 def makesure(req):
-    query=sessionLocal.text("SELECT * FROM %s WHERE %s=%s AND %s=%s"%())
-    if query is not None:
-        # buildSession
-        pass
-    return False
+    conf=configparser.ConfigParser()
+    conf.read('config/App.ini')
 
-def session():
-    pass
-
-@bp.before_app_request
-def load_logged_in_user():
-    user_id = session.get("user_id")
-    if user_id is None:
-        print(g.user)
-        g.user = None
+    query="SELECT * FROM %s WHERE %s=%s"%(conf['Auth']['Table'],conf['Auth']['IdentityColumn'],req['un'])
+    print(query)
+    # if query is not None:
+    #     # buildSession
+    #     pass
+    # return False
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
@@ -43,15 +30,31 @@ def login():
         authReq={
             'un': request.form['username']
         }
+        makesure(authReq)
         error=None
         if error is None:
             session.clear()
             session['user_id']=authReq['un']
-            session['session']=uuid.uuid4()
             return redirect(url_for('route.index'))
     return render_template("auth.jinja")
+
+@bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get("user_id")
+    if user_id is None:
+        g.user = None
+    else:
+        g.user=user_id
 
 @bp.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for("index"))
+    return redirect(url_for("route.index"))
+
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for("auth.login"))
+        return view(**kwargs)
+    return wrapped_view
