@@ -28,10 +28,9 @@ def login():
     # create sample login
     if request.method=='POST':
         authReq={
-            'un':request.form['username']
-            # 'pass':request.form['password']
+            'un':request.form['username'],
+            'pass':request.form['password']
         }
-
         if makesure(authReq) is None:
             print(makesure(authReq))
         else:

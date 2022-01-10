@@ -1,6 +1,8 @@
 from sqlalchemy.ext.declarative import DeclarativeMeta,declarative_base
+from werkzeug.security import generate_password_hash,check_password_hash
 from datetime import datetime
 import json
+import bcrypt
 
 # This code below is a stimulous of JSON encoder if you see an error JSON seriazible.
 class encoder(json.JSONEncoder):
@@ -24,3 +26,24 @@ def nowInTimestamp():
     strftime=cur.strftime('%Y-%m-%d %H:%M:%S')
     epochCon=datetime.timestamp(strftime)
     return epochCon
+
+# on consideration
+def genDefHash(key):
+    k=generate_password_hash(key)
+    return k
+
+def checkDefHash(key,comparison):
+    k=check_password_hash(key,comparison)
+    return k
+
+def goBcrypt(key):
+    k=b'%s'%(key)
+    salting=bcrypt.gensalt()
+    goHash=bcrypt.hashpw(k,salting)
+    return goHash
+
+def checkBcrypt(key):
+    if bcrypt.checkpw(key,goBcrypt(key)):
+        print('Match')
+    else:
+        print('Not match')

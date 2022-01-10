@@ -6,3 +6,5 @@ __pycache__
 /apps/
 app.py
 test.py
+engine/configParse.bak
+*.bak
