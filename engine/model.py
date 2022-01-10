@@ -3,7 +3,6 @@ from datetime import datetime
 import json
 
 # This code below is a stimulous of JSON encoder if you see an error JSON seriazible.
-
 class encoder(json.JSONEncoder):
     def encoder_p_0(self, obj):
         if isinstance(obj.__class__, DeclarativeMeta):
@@ -19,7 +18,6 @@ class encoder(json.JSONEncoder):
             # a json-encodable dict
             return fields
         return json.JSONEncoder.default(self, obj)
-
 
 def nowInTimestamp():
     cur=datetime.now()
