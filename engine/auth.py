@@ -11,6 +11,11 @@ import uuid
 import configparser
 import sys
 
+# This file is just for authentication not register handling.
+# If you're not use build in authentication, you can comment "@login_required".
+# There's maybe have an error if you're not commented.
+# Login & logout page maybe un-available. You can built in manually with different name.
+
 apps=init()
 bp=Blueprint('auth',__name__)
 conf=configparser.ConfigParser()
@@ -31,9 +36,7 @@ def login():
             'un':request.form['username'],
             'pass':request.form['password']
         }
-        if makesure(authReq) is None:
-            print(makesure(authReq))
-        else:
+        if makesure(authReq) is not None:
             session.clear()
             session['user_id']=authReq['un']
             return redirect(url_for('route.index'))
@@ -42,7 +45,6 @@ def login():
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get("user_id")
-    print(user_id)
     if user_id is None:
         g.user = None
     else:
