@@ -21,7 +21,7 @@ def build():
         for jg in jgp:
             a.jinja_env.globals[jg['key']]=jg['value']
     @a.template_filter('epochConvert')
-    def epochConverter(ts,format='%d/%m/%Y %H:%M'):
+    def timeStampToStr(ts,format='%d/%m/%Y %H:%M:%S'):
         epoch=datetime.datetime.fromtimestamp(int(ts))
         if ts is None:
             return ""
