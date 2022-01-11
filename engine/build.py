@@ -28,10 +28,10 @@ def build():
         return epoch.strftime(format)
     connector=engine.defineDriver()
     jp(a)
-    if cfg['Auth']['default'] == True:
-        aut=engine.auth
-        a.register_blueprint(aut.bp)
+    # if cfg['Auth']['default'] == True:
+    aut=engine.auth
     w=routes.web
+    a.register_blueprint(aut.bp)
     a.register_blueprint(w.bp)
     a.register_error_handler(404, page_not_found)
     return a

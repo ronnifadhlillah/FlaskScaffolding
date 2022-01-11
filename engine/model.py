@@ -28,22 +28,22 @@ def nowInTimestamp():
     return epochCon
 
 # on consideration
-def genDefHash(key):
-    k=generate_password_hash(key)
-    return k
+def handleHashing(statement,key1,compare_key=None):
+    if statement is 'generate hashing':
+        generate_password_hash(key)
+    elif statement is 'hash validation':
+        return check_password_hash(key,compare_key)
 
-def checkDefHash(key,comparison):
-    k=check_password_hash(key,comparison)
-    return k
-
-def goBcrypt(key):
-    k=b'%s'%(key)
-    salting=bcrypt.gensalt()
-    goHash=bcrypt.hashpw(k,salting)
-    return goHash
-
-def checkBcrypt(key):
-    if bcrypt.checkpw(key,goBcrypt(key)):
-        print('Match')
-    else:
-        print('Not match')
+# for bycrypt , install bcrypt module by pip install bycrypt
+# def goBcrypt(key):
+#     k=b'%s'%(key)
+#     salting=bcrypt.gensalt()
+#     goHash=bcrypt.hashpw(k,salting)
+#     return goHash
+#
+# def checkBcrypt(key):
+#     k=b'%s'%(key)
+#     if bcrypt.checkpw(key,goBcrypt(key)):
+#         return True
+#     else:
+#         return False

@@ -1,8 +1,6 @@
 from flask import g,Blueprint,render_template,session,redirect,request,url_for,flash
 from sqlalchemy import text
-from engine import sessionLocal
-from engine.build import init
-from engine.database import sessionLocal
+from engine import init,sessionLocal,handleHashing
 from werkzeug.exceptions import abort
 import datetime
 import functools
@@ -22,11 +20,16 @@ conf=configparser.ConfigParser()
 conf.read('config/App.ini')
 
 def makesure(req):
-    query=text("SELECT * FROM %s WHERE %s='%s'"%(conf['Auth']['Table'],conf['Auth']['IdentityColumn'],req['un']))
+    sql="""SELECT *
+    FROM %s
+    WHERE %s='%s'
+    AND %s='%s'"""
+    query=text(sql%(conf['Auth']['Table'],conf['Auth']['IdentityColumn'],req['un'],conf['Auth']['PasswordColumn'],req['pass']))
     res=sessionLocal.execute(query).scalar()
-    if res is not None:
+    if row is not None:
+        handleHashing('hash validation', req['pass'],res['passsword'])
         return True
-    return res
+    return row
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
