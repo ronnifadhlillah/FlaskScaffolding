@@ -2,6 +2,7 @@ from flask import g,Blueprint,render_template,session,redirect,request,url_for,f
 from sqlalchemy import text
 from engine import init,sessionLocal,handleHashing
 from werkzeug.exceptions import abort
+from werkzeug.security import generate_password_hash,check_password_hash
 import datetime
 import functools
 import routes
@@ -22,13 +23,18 @@ conf.read('config/App.ini')
 def makesure(req):
     sql="""SELECT *
     FROM %s
-    WHERE %s='%s'
-    AND %s='%s'"""
-    query=text(sql%(conf['Auth']['Table'],conf['Auth']['IdentityColumn'],req['un'],conf['Auth']['PasswordColumn'],req['pass']))
-    res=sessionLocal.execute(query).scalar()
-    if row is not None:
-        handleHashing('hash validation', req['pass'],res['passsword'])
-        return True
+    WHERE %s='%s'"""
+    query=text(sql%(conf['Auth']['Table'],conf['Auth']['IdentityColumn'],req['un']))
+    row=sessionLocal.execute(query).fetchone()
+    if row is not None and check_password_hash(row['password'],req['pass']):
+        # print(check_password_hash(row['password'],req['pass']))
+        # its return true at the end
+        pass
+        # if check_password_hash(sl['password'],p):
+        # # return False
+        # # print(row['password'])
+        # # handleHashing('hash validation', req['pass'],row['passsword'])
+        #     return True
     return row
 
 @bp.route("/login", methods=("GET", "POST"))
