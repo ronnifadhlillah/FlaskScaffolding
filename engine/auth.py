@@ -1,12 +1,11 @@
 from flask import g,Blueprint,render_template,session,redirect,request,url_for,flash
 from sqlalchemy import text
-from engine import init,sessionLocal,handleHashing
+from engine import init,sessionLocal
 from werkzeug.exceptions import abort
-from werkzeug.security import generate_password_hash,check_password_hash
 import datetime
 import functools
 import routes
-import uuid
+import bcrypt
 import configparser
 import sys
 
@@ -26,20 +25,18 @@ def makesure(req):
     WHERE %s='%s'"""
     query=text(sql%(conf['Auth']['Table'],conf['Auth']['IdentityColumn'],req['un']))
     row=sessionLocal.execute(query).fetchone()
-    if row is not None and check_password_hash(row['password'],req['pass']):
-        # print(check_password_hash(row['password'],req['pass']))
-        # its return true at the end
-        pass
-        # if check_password_hash(sl['password'],p):
-        # # return False
-        # # print(row['password'])
-        # # handleHashing('hash validation', req['pass'],row['passsword'])
-        #     return True
+    password=req['pass']
+    ps=row['password']
+    pss=ps.encode()
+    p=password.encode()
+    if row is not None and bcrypt.checkpw(p,pss):
+        return True
     return row
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
     # create sample login
+    session.clear()
     if request.method=='POST':
         authReq={
             'un':request.form['username'],

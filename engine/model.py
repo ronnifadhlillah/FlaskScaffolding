@@ -1,5 +1,4 @@
 from sqlalchemy.ext.declarative import DeclarativeMeta,declarative_base
-from werkzeug.security import generate_password_hash,check_password_hash
 from datetime import datetime
 import json
 import bcrypt
@@ -28,12 +27,12 @@ def nowInTimestamp():
     return epochCon
 
 # on consideration
-def handleHashing(statement,key,compare_key=None):
-    if statement is 'generate hashing':
-        generate_password_hash(key)
-    elif statement is 'hash validation':
-        # return check_password_hash(key,compare_key)
-        return key,compare_key
+# def handleHashing(statement,key,compare_key=None):
+#     if statement is 'generate hashing':
+#         generate_password_hash(key)
+#     elif statement is 'hash validation':
+#         # return check_password_hash(key,compare_key)
+#         return key,compare_key
 
 # for bycrypt , install bcrypt module by pip install bycrypt
 # def goBcrypt(key):
@@ -42,9 +41,9 @@ def handleHashing(statement,key,compare_key=None):
 #     goHash=bcrypt.hashpw(k,salting)
 #     return goHash
 #
-# def checkBcrypt(key):
-#     k=b'%s'%(key)
-#     if bcrypt.checkpw(key,goBcrypt(key)):
-#         return True
-#     else:
-#         return False
+def checkHash(key):
+    k=b'%s'%(key)
+    if bcrypt.checkpw(key,goBcrypt(key)):
+        return True
+    else:
+        return False
