@@ -2,6 +2,9 @@
 {%block content%}
 <h1>Authentication</h1>
 <div class="row">
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
   <form method="POST">
     <table border='0'>
       <tr>

@@ -1,6 +1,6 @@
 from flask import g,Blueprint,render_template,session,redirect,request,url_for,flash
 from sqlalchemy import text
-from engine import init,sessionLocal
+from engine import init,sessionLocal,check_hash
 from werkzeug.exceptions import abort
 import datetime
 import functools
@@ -25,13 +25,11 @@ def makesure(req):
     WHERE %s='%s'"""
     query=text(sql%(conf['Auth']['Table'],conf['Auth']['IdentityColumn'],req['un']))
     row=sessionLocal.execute(query).fetchone()
-    password=req['pass']
-    ps=row['password']
-    pss=ps.encode()
-    p=password.encode()
-    if row is not None and bcrypt.checkpw(p,pss):
+
+    if row is not None and check_hash(req['pass'],row['password']) is not False:
         return True
-    return row
+    else:
+        return None
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
@@ -42,10 +40,13 @@ def login():
             'un':request.form['username'],
             'pass':request.form['password']
         }
+        error=None
         if makesure(authReq) is not None:
             session.clear()
             session['user_id']=authReq['un']
             return redirect(url_for('route.index'))
+        error='Check username and password'
+        flash(error)
     return render_template("auth.jinja")
 
 @bp.before_app_request
