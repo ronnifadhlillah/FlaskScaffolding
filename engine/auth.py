@@ -8,6 +8,7 @@ import routes
 import bcrypt
 import configparser
 import sys
+import uuid
 
 # This file is just for authentication not register handling.
 # If you're not use build in authentication, you can comment "@login_required".
@@ -27,6 +28,7 @@ def makesure(req):
     row=sessionLocal.execute(query).fetchone()
 
     if row is not None and check_hash(req['pass'],row['password']) is not False:
+        session['token']=uuid.uuid4()
         return True
     else:
         return None
@@ -42,8 +44,6 @@ def login():
         }
         error=None
         if makesure(authReq) is not None:
-            session.clear()
-            session['user_id']=authReq['un']
             return redirect(url_for('route.index'))
         error='Check username and password'
         flash(error)
@@ -51,11 +51,11 @@ def login():
 
 @bp.before_app_request
 def load_logged_in_user():
-    user_id = session.get("user_id")
-    if user_id is None:
-        g.user = None
+    token = session.get("token")
+    if token is None:
+        g.token = None
     else:
-        g.user=user_id
+        g.token=token
 
 @bp.route("/logout")
 def logout():
@@ -65,7 +65,7 @@ def logout():
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if g.user is None:
+        if g.token is None:
             return redirect(url_for("auth.login"))
         return view(**kwargs)
     return wrapped_view
