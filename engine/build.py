@@ -1,7 +1,9 @@
 from flask import Flask,render_template,request
 import engine
+import requests
 import routes
 import configparser
+import werkzeug
 
 cfg=configparser.ConfigParser()
 cfg.read("config/App.ini")
@@ -29,15 +31,19 @@ def build():
     connector=engine.defineDriver()
     jp(a)
     # if cfg['Auth']['default'] == True:
-    aut=engine.auth
-    w=routes.web
-    a.register_blueprint(aut.bp)
-    a.register_blueprint(w.bp)
-    a.register_error_handler(404, page_not_found)
+    if cfg['BootStrap']['Maintenance']=="True":
+        err=engine.errCode
+        a.register_blueprint(err.err)
+        # print(cfg['BootStrap']['Maintenance'])
+    else:
+        aut=engine.auth
+        w=routes.web
+        a.register_blueprint(aut.bp)
+        a.register_blueprint(w.bp)
     return a
 
 def jp(a):
-    if(cfg['Application']['Debug'])=="True":
+    if cfg['Application']['Debug']=="True":
         bool=True
     else:
         bool=False
@@ -57,8 +63,14 @@ def hook(k,v):
     }
     return arr
 
-def page_not_found(e):
-  return render_template('404.jinja'), 404
+def handling_error(a):
+    return a.register_error_handler(errcode, errDef)
+
+# def page_not_found(e):
+#   return render_template('404.jinja'), 404
+def maintenanceMode(e):
+  return render_template('503.jinja'), 503
+
 
 def copyPat():
     apps=init()

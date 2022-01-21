@@ -27,6 +27,8 @@ def makesure(req):
     query=text(sql%(conf['Auth']['Table'],conf['Auth']['IdentityColumn'],req['un']))
     row=sessionLocal.execute(query).fetchone()
 
+    # Role Middleware if available
+
     if row is not None and check_hash(req['pass'],row['password']) is not False:
         session['token']=uuid.uuid4()
         return True
