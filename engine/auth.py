@@ -18,7 +18,7 @@ import uuid
 apps=init()
 bp=Blueprint('auth',__name__)
 conf=configparser.ConfigParser()
-conf.read('config/App.ini')
+conf.read('config/App.py')
 
 def makesure(req):
     sql="""SELECT *

@@ -6,7 +6,7 @@ import configparser
 import werkzeug
 
 cfg=configparser.ConfigParser()
-cfg.read("config/App.ini")
+cfg.read("config/App.py")
 
 def init(test_config=None):
     return Flask(cfg['Application']['AppName'],
@@ -15,6 +15,8 @@ def init(test_config=None):
     instance_relative_config=True)
 
 def build():
+    if cfg['BootStrap']['Maintenance'] == 'True':
+        print('Maintenance Mode')
     a=init()
     @a.before_request
     def bt():
@@ -22,6 +24,7 @@ def build():
         jgp=g
         for jg in jgp:
             a.jinja_env.globals[jg['key']]=jg['value']
+
     @a.template_filter('epochConvert')
     def timeStampToStr(ts,format='%d/%m/%Y %H:%M:%S'):
         epoch=datetime.datetime.fromtimestamp(int(ts))
@@ -30,16 +33,11 @@ def build():
         return epoch.strftime(format)
     connector=engine.defineDriver()
     jp(a)
-    # if cfg['Auth']['default'] == True:
-    if cfg['BootStrap']['Maintenance']=="True":
-        err=engine.errCode
-        a.register_blueprint(err.err)
-        # print(cfg['BootStrap']['Maintenance'])
-    else:
-        aut=engine.auth
-        w=routes.web
-        a.register_blueprint(aut.bp)
-        a.register_blueprint(w.bp)
+    handling_error(a)
+    aut=engine.auth
+    w=routes.web
+    a.register_blueprint(aut.bp)
+    a.register_blueprint(w.bp)
     return a
 
 def jp(a):
@@ -64,13 +62,18 @@ def hook(k,v):
     return arr
 
 def handling_error(a):
-    return a.register_error_handler(errcode, errDef)
+    a.register_error_handler(404, page_not_found)
+    a.register_error_handler(400, page_bad_request)
+    a.register_error_handler(400, page_bad_request)
 
-# def page_not_found(e):
-#   return render_template('404.jinja'), 404
-def maintenanceMode(e):
-  return render_template('503.jinja'), 503
+def page_not_found(errCode):
+  return render_template('404.jinja'), 404
 
+def page_bad_request(errCode):
+    return render_template('400.jinja'), 400
+
+def page_rto(errCode):
+    return render_template('408.jinja'), 408
 
 def copyPat():
     apps=init()

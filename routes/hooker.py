@@ -7,7 +7,7 @@ import socket
 import configparser
 
 cfg=configparser.ConfigParser()
-cfg.read('config/App.ini')
+cfg.read('config/App.py')
 
 # Hooker is direct bind without going throught controller.
 # you can directly parsing into view by calling it's 'key'
