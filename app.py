@@ -7,6 +7,5 @@ apps=engine.build()
 aut=engine.auth
 apps.register_blueprint(aut.bp)
 
-
 if __name__=="__main__":
     apps.run()

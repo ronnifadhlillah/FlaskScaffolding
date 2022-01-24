@@ -36,18 +36,18 @@ def generate_hash(key):
     return hash
 
 def check_hash(key1,key2):
-    #compare the string just you've been input
+    # compare the string just you've been input
     return bcrypt.checkpw(key1.encode(),key2.encode())
 
 def pageLoadTime():
-    #initialize the variable start
-    #to store the starting time of
-    #execution of program
+    # initialize the variable start
+    # to store the starting time of
+    # execution of program
     start = time.time()
 
-    #take any program but for
-    #example we have taken the below
-    #program
+    # take any program but for
+    # example we have taken the below
+    # program
     a = 0
     for i in range(1000):
         a += (i**100)

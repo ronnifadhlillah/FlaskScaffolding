@@ -14,6 +14,7 @@ cfg.read('config/app.py')
 # you can directly parsing into view by calling it's 'key'
 
 # hook(key, value) --> Sample
+# Calling hook in jinja --> {{key}}
 
 a=init()
 @a.before_request
