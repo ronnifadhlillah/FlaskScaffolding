@@ -4,6 +4,7 @@ __pycache__
 /public/
 /temp/
 /apps/
+/views/
 app.py
 test.py
 engine/configParse.bak

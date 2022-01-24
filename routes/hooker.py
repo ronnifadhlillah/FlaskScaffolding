@@ -1,4 +1,5 @@
 from engine.build import init, hook
+from engine.model import pageLoadTime
 from flask import request,g
 import urllib
 import time
@@ -7,7 +8,7 @@ import socket
 import configparser
 
 cfg=configparser.ConfigParser()
-cfg.read('config/App.py')
+cfg.read('config/app.py')
 
 # Hooker is direct bind without going throught controller.
 # you can directly parsing into view by calling it's 'key'
@@ -24,4 +25,4 @@ def jGlobal():
         hook('pl',pageLoadTime()),
         # add here for more hook
     )
-    return arr    
+    return arr

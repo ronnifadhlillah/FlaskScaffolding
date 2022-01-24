@@ -1,8 +1,12 @@
 from sqlalchemy.ext.declarative import DeclarativeMeta,declarative_base
+from flask import request
 from datetime import datetime
+from engine.build import init
 import json
 import bcrypt
+import time
 
+# Like mixer this file is contain everything that you want to write.
 # This code below is a stimulous of JSON encoder if you see an error JSON seriazible.
 class encoder(json.JSONEncoder):
     def encoder_p_0(self, obj):
@@ -32,6 +36,7 @@ def generate_hash(key):
     return hash
 
 def check_hash(key1,key2):
+    #compare the string just you've been input
     return bcrypt.checkpw(key1.encode(),key2.encode())
 
 def pageLoadTime():
@@ -53,3 +58,8 @@ def pageLoadTime():
     end = time.time()
     pl=end-start
     return pl
+
+def copyPat():
+    apps=init()
+    with apps.app_context():
+        return request.url

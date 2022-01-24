@@ -5,7 +5,7 @@ import configparser
 import os
 
 cfg=configparser.ConfigParser()
-cfg.read('config/Database.ini')
+cfg.read('config/database.py')
 
 # Currently working in MariaDB / MySQL driver only
 

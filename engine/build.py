@@ -6,7 +6,7 @@ import configparser
 import werkzeug
 
 cfg=configparser.ConfigParser()
-cfg.read("config/App.py")
+cfg.read("config/app.py")
 
 def init(test_config=None):
     return Flask(cfg['Application']['AppName'],
@@ -15,8 +15,6 @@ def init(test_config=None):
     instance_relative_config=True)
 
 def build():
-    if cfg['BootStrap']['Maintenance'] == 'True':
-        print('Maintenance Mode')
     a=init()
     @a.before_request
     def bt():
@@ -34,9 +32,7 @@ def build():
     connector=engine.defineDriver()
     jp(a)
     handling_error(a)
-    aut=engine.auth
     w=routes.web
-    a.register_blueprint(aut.bp)
     a.register_blueprint(w.bp)
     return a
 
@@ -67,15 +63,10 @@ def handling_error(a):
     a.register_error_handler(400, page_bad_request)
 
 def page_not_found(errCode):
-  return render_template('404.jinja'), 404
+  return render_template('errorPage/404.jinja'), 404
 
 def page_bad_request(errCode):
-    return render_template('400.jinja'), 400
+    return render_template('errorPage400.jinja'), 400
 
 def page_rto(errCode):
-    return render_template('408.jinja'), 408
-
-def copyPat():
-    apps=init()
-    with apps.app_context():
-        return request.url
+    return render_template('errorPage/408.jinja'), 408

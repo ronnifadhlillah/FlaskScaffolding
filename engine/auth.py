@@ -10,15 +10,12 @@ import configparser
 import sys
 import uuid
 
-# This file is just for authentication not register handling.
-# If you're not use build in authentication, you can comment "@login_required".
-# There's maybe have an error if you're not commented.
-# Login & logout page maybe un-available. You can built in manually with different name.
+# this file is used to handling login session by default.
 
 apps=init()
 bp=Blueprint('auth',__name__)
 conf=configparser.ConfigParser()
-conf.read('config/App.py')
+conf.read('config/app.py')
 
 def makesure(req):
     sql="""SELECT *
