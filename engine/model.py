@@ -33,3 +33,23 @@ def generate_hash(key):
 
 def check_hash(key1,key2):
     return bcrypt.checkpw(key1.encode(),key2.encode())
+
+def pageLoadTime():
+    #initialize the variable start
+    #to store the starting time of
+    #execution of program
+    start = time.time()
+
+    #take any program but for
+    #example we have taken the below
+    #program
+    a = 0
+    for i in range(1000):
+        a += (i**100)
+
+    #now initialized the variable
+    #end to store the ending time after
+    #execution of program
+    end = time.time()
+    pl=end-start
+    return pl
