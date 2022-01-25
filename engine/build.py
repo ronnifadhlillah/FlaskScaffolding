@@ -4,6 +4,7 @@ import requests
 import routes
 import configparser
 import werkzeug
+import logging
 
 cfg=configparser.ConfigParser()
 cfg.read("config/app.py")
@@ -16,13 +17,7 @@ def init(test_config=None):
 
 def build():
     a=init()
-    @a.before_request
-    def bt():
-        g=routes.jGlobal()
-        jgp=g
-        for jg in jgp:
-            a.jinja_env.globals[jg['key']]=jg['value']
-
+    beforeReq(a)
     @a.template_filter('epochConvert')
     def timeStampToStr(ts,format='%d/%m/%Y %H:%M:%S'):
         epoch=datetime.datetime.fromtimestamp(int(ts))
@@ -35,6 +30,18 @@ def build():
     w=routes.web
     a.register_blueprint(w.bp)
     return a
+
+def beforeReq(a):
+    @a.before_request
+    def bt():
+        g=routes.jGlobal()
+        jgp=g
+        for jg in jgp:
+            a.jinja_env.globals[jg['key']]=jg['value']
+
+    @a.before_request
+    def before_first_request():
+        print('FUCK YOU')
 
 def jp(a):
     if cfg['Application']['Debug']=="True":
