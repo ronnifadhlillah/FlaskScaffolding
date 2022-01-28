@@ -3,7 +3,8 @@ __pycache__
 /public/
 /temp/
 /apps/
-/views/
+/views/*.jinja
+/views/errorPage/*.jinja
 test.py
 engine/configParse.bak
 *.bak
