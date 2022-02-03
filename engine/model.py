@@ -6,6 +6,9 @@ import json
 import bcrypt
 import time
 
+# initialize engine module in model
+a=init()
+
 # Like mixer this file is contain everything that you want to write.
 # This code below is a stimulous of JSON encoder if you see an error JSON seriazible.
 class encoder(json.JSONEncoder):
@@ -30,6 +33,13 @@ def nowInTimestamp():
     epochCon=datetime.timestamp(strftime)
     return epochCon
 
+@a.template_filter('epochConvert')
+def timeStampToStr(ts,format='%d/%m/%Y %H:%M:%S'):
+    epoch=datetime.datetime.fromtimestamp(int(ts))
+    if ts is None:
+        return ""
+    return epoch.strftime(format)
+
 def generate_hash(key):
     salting=bcrypt.gensalt()
     hash=bcrypt.hashpw(key.encode(),salt)
@@ -52,9 +62,9 @@ def pageLoadTime():
     for i in range(1000):
         a += (i**100)
 
-    #now initialized the variable
-    #end to store the ending time after
-    #execution of program
+    # now initialized the variable
+    # end to store the ending time after
+    # execution of program
     end = time.time()
     pl=end-start
     return pl

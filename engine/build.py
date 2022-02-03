@@ -1,4 +1,5 @@
 from flask import Flask,render_template,request
+import datetime
 import engine
 import requests
 import routes
@@ -18,15 +19,17 @@ def init(test_config=None):
 def build():
     a=init()
     beforeReq(a)
-    @a.template_filter('epochConvert')
-    def timeStampToStr(ts,format='%d/%m/%Y %H:%M:%S'):
-        epoch=datetime.datetime.fromtimestamp(int(ts))
-        if ts is None:
-            return ""
-        return epoch.strftime(format)
+    # The script below is temporary down
+    # @a.template_filter('epochConvert')
+    # def timeStampToStr(ts,format='%d/%m/%Y %H:%M:%S'):
+    #     epoch=datetime.datetime.fromtimestamp(int(ts))
+    #     if ts is None:
+    #         return ""
+    #     return epoch.strftime(format)
     connector=engine.defineDriver()
     jp(a)
     handling_error(a)
+    # General routes / Routes for all
     w=routes.web
     a.register_blueprint(w.bp)
     return a
@@ -41,7 +44,7 @@ def beforeReq(a):
 
     @a.before_request
     def before_first_request():
-        print('FUCK YOU')
+        print(datetime.datetime.now())
 
 def jp(a):
     if cfg['Application']['Debug']=="True":
