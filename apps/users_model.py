@@ -9,6 +9,4 @@ class Users(base):
     __tablename__='users'
     id=Column(Integer,primary_key=True,index=True)
     username=Column(Text,nullable=False)
-    email=Column(String(100),nullable=False)
     password=Column(String(100),nullable=False)
-    

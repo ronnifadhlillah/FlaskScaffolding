@@ -19,13 +19,6 @@ def init(test_config=None):
 def build():
     a=init()
     beforeReq(a)
-    # The script below is temporary down
-    # @a.template_filter('epochConvert')
-    # def timeStampToStr(ts,format='%d/%m/%Y %H:%M:%S'):
-    #     epoch=datetime.datetime.fromtimestamp(int(ts))
-    #     if ts is None:
-    #         return ""
-    #     return epoch.strftime(format)
     connector=engine.defineDriver()
     jp(a)
     handling_error(a)

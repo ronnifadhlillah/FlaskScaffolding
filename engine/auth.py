@@ -1,7 +1,9 @@
 from flask import g,Blueprint,render_template,session,redirect,request,url_for,flash
-from sqlalchemy import text
+from sqlalchemy import text,inspect
 from engine import init,sessionLocal,check_hash
+from engine.model import encoder
 from werkzeug.exceptions import abort
+from apps.users_model import Users
 import datetime
 import functools
 import routes
@@ -9,6 +11,7 @@ import bcrypt
 import configparser
 import sys
 import uuid
+import json
 
 # this file is used to handling login session by default.
 
@@ -18,16 +21,17 @@ conf=configparser.ConfigParser()
 conf.read('config/app.py')
 
 def makesure(req):
-    sql="""SELECT *
-    FROM %s
-    WHERE %s='%s'"""
-    query=text(sql%(conf['Auth']['Table'],conf['Auth']['IdentityColumn'],req['un']))
-    row=sessionLocal.execute(query).fetchone()
-
+    q=sessionLocal.query(Users).filter_by(username=req['un'])
+    sql=q.distinct()
     # Role Middleware if available
-
-    if row is not None and check_hash(req['pass'],row['password']) is not False:
+    if sql is not None:
         session['token']=uuid.uuid4()
+        t = [r.username for r in sql]
+        print(t)
+        mapper = inspect(Users)
+        for column in mapper.attrs:
+            ck=column.key
+            # session[ck]=
         return True
     else:
         return None
