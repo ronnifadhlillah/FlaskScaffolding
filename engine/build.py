@@ -37,7 +37,8 @@ def beforeReq(a):
 
     @a.before_request
     def before_first_request():
-        print(datetime.datetime.now())
+        # print(datetime.datetime.now())
+        pass
 
 def jp(a):
     if cfg['Application']['Debug']=="True":

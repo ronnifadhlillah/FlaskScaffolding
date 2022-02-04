@@ -11,7 +11,6 @@ import bcrypt
 import configparser
 import sys
 import uuid
-import json
 
 # this file is used to handling login session by default.
 
@@ -22,16 +21,17 @@ conf.read('config/app.py')
 
 def makesure(req):
     q=sessionLocal.query(Users).filter_by(username=req['un'])
-    sql=q.distinct()
+    sql=q.first()
     # Role Middleware if available
-    if sql is not None:
+    if sql is not None and check_hash(req['pass'],sql.password) is not False:
         session['token']=uuid.uuid4()
-        t = [r.username for r in sql]
-        print(t)
-        mapper = inspect(Users)
-        for column in mapper.attrs:
-            ck=column.key
-            # session[ck]=
+        session['logged_in']=True
+        sql2=q.all()
+        row = sql2[0]
+        row_as_dict = {column: str(getattr(row, column)) for column in row.__table__.c.keys()}
+        # print(len(row_as_dict))
+        for data in row_as_dict:
+            session[data]=row_as_dict[data]
         return True
     else:
         return None
@@ -54,11 +54,13 @@ def login():
 
 @bp.before_app_request
 def load_logged_in_user():
-    token = session.get("token")
+    token=session.get("token")
+    username=session.get('username')
     if token is None:
         g.token = None
     else:
         g.token=token
+        g.username=username
 
 @bp.route("/logout")
 def logout():
