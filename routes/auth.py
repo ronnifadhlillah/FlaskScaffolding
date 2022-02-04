@@ -1,38 +1,25 @@
 from flask import g,Blueprint,render_template,session,redirect,request,url_for,flash
-from sqlalchemy import text,inspect
-from engine import init,sessionLocal,check_hash
-from engine.model import encoder
+from sqlalchemy import text
+from engine import init,sessionLocal,check_hash,load_current_user,login_required,asDict
 from werkzeug.exceptions import abort
 from apps.users_model import Users
 import datetime
-import functools
-import routes
-import bcrypt
-import configparser
-import sys
 import uuid
 
 # this file is used to handling login session by default.
 
 apps=init()
 bp=Blueprint('auth',__name__)
-conf=configparser.ConfigParser()
-conf.read('config/app.py')
-
-def asDict(row):
-    dict = {column: str(getattr(row, column)) for column in row.__table__.c.keys()}
-    return dict
 
 def makesure(req):
     q=sessionLocal.query(Users).filter_by(username=req['un'])
     sql=q.first()
-    # Role Middleware if available
+    # User found and password compare logic.
     if sql is not None and check_hash(req['pass'],sql.password) is not False:
+        # Build a session
         session['token']=uuid.uuid4()
         session['logged_in']=True
         row=q.all()[0]
-        # row_as_dict = {column: str(getattr(row, column)) for column in row.__table__.c.keys()}
-        # print(len(row_as_dict))
         rad=asDict(row)
         for data in rad:
             session[data]=rad[data]
@@ -40,7 +27,7 @@ def makesure(req):
     else:
         return None
 
-@bp.route("/login", methods=("GET", "POST"))
+@bp.route("/login", methods=("GET","POST"))
 def login():
     # create sample login
     session.clear()
@@ -57,22 +44,10 @@ def login():
     return render_template("auth.jinja")
 
 @bp.before_app_request
-def load_logged_in_user():
-    token=session.get("token")
-    if token is None:
-        g.token=None
-    else:
-        g.token=token
+def session_loader():
+    load_current_user()
 
 @bp.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("auth.login"))
-
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.token is None:
-            return redirect(url_for("auth.login"))
-        return view(**kwargs)
-    return wrapped_view

@@ -1,5 +1,4 @@
-from engine.build import init, hook
-from engine.model import pageLoadTime
+from engine import init,hook,pageLoadTime
 from flask import request,g
 import urllib
 import time

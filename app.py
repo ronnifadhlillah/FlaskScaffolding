@@ -4,7 +4,7 @@ import engine
 apps=engine.build()
 
 # Registering Blueprint sample
-aut=engine.auth
+aut=routes.auth
 apps.register_blueprint(aut.bp)
 
 if __name__=="__main__":
