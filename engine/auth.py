@@ -19,6 +19,10 @@ bp=Blueprint('auth',__name__)
 conf=configparser.ConfigParser()
 conf.read('config/app.py')
 
+def asDict(row):
+    dict = {column: str(getattr(row, column)) for column in row.__table__.c.keys()}
+    return dict
+
 def makesure(req):
     q=sessionLocal.query(Users).filter_by(username=req['un'])
     sql=q.first()
@@ -26,12 +30,12 @@ def makesure(req):
     if sql is not None and check_hash(req['pass'],sql.password) is not False:
         session['token']=uuid.uuid4()
         session['logged_in']=True
-        sql2=q.all()
-        row = sql2[0]
-        row_as_dict = {column: str(getattr(row, column)) for column in row.__table__.c.keys()}
+        row=q.all()[0]
+        # row_as_dict = {column: str(getattr(row, column)) for column in row.__table__.c.keys()}
         # print(len(row_as_dict))
-        for data in row_as_dict:
-            session[data]=row_as_dict[data]
+        rad=asDict(row)
+        for data in rad:
+            session[data]=rad[data]
         return True
     else:
         return None
@@ -55,12 +59,10 @@ def login():
 @bp.before_app_request
 def load_logged_in_user():
     token=session.get("token")
-    username=session.get('username')
     if token is None:
-        g.token = None
+        g.token=None
     else:
         g.token=token
-        g.username=username
 
 @bp.route("/logout")
 def logout():

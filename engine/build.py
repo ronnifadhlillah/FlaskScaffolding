@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,session
 import datetime
 import engine
 import requests
@@ -36,8 +36,14 @@ def beforeReq(a):
             a.jinja_env.globals[jg['key']]=jg['value']
 
     @a.before_request
+    def sessArray():
+        for k,v in session.items():
+            a.jinja_env.globals[k]=v
+
+    @a.before_request
     def before_first_request():
         # print(datetime.datetime.now())
+        # print(session)
         pass
 
 def jp(a):
