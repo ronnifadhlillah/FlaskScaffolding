@@ -40,12 +40,6 @@ def beforeReq(a):
         for k,v in session.items():
             a.jinja_env.globals[k]=v
 
-    @a.before_request
-    def before_first_request():
-        # print(datetime.datetime.now())
-        # print(session)
-        pass
-
 def jp(a):
     if cfg['Application']['Debug']=="True":
         bool=True
@@ -56,7 +50,6 @@ def jp(a):
     a.config['SECRET_KEY']=cfg['Application']['SecretKey']
     a.secret_key=cfg['Application']['SecretKey']
     a.jinja_env.auto_reload=bool
-
     if cfg['URI']['Set']=="True":
         a.config['SERVER_NAME']=cfg['URI']['Url']+':'+cfg['URI']['Port']
 
