@@ -1,6 +1,6 @@
 from flask import g,Blueprint,render_template,session,redirect,request,url_for,flash
 from sqlalchemy import text
-from engine import init,sessionLocal,check_hash,load_current_user,login_required,asDict
+from engine import init,sessionLocal,check_hash,load_current_user,login_required,asDict,randStr,generate_hash
 from werkzeug.exceptions import abort
 from apps.users_model import Users
 import datetime
@@ -17,7 +17,7 @@ def makesure(req):
     # User found and password compare logic.
     if sql is not None and check_hash(req['pass'],sql.password) is not False:
         # Build a session
-        session['token']=uuid.uuid4()
+        session['token']=generate_hash(randStr())
         session['logged_in']=True
         row=q.all()[0]
         rad=asDict(row)

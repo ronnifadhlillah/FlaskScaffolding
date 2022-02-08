@@ -5,6 +5,7 @@ from apps.sample_model import MockData
 from werkzeug.exceptions import abort
 from sqlalchemy import desc,asc
 import datetime
+
 # If you're not use build in authentication, you can comment "@login_required".
 # There's maybe have an error if you're not commented.
 # Login & logout page maybe un-available. You can built in manually with different name.

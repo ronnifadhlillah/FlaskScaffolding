@@ -5,6 +5,8 @@ from engine import init
 import json
 import bcrypt
 import time
+import random
+import string
 
 # initialize engine module in model
 a=init()
@@ -42,12 +44,16 @@ def timeStampToStr(ts,format='%d/%m/%Y %H:%M:%S'):
 
 def generate_hash(key):
     salting=bcrypt.gensalt()
-    hash=bcrypt.hashpw(key.encode(),salt)
+    hash=bcrypt.hashpw(key.encode(),salting)
     return hash
 
 def check_hash(key1,key2):
     # compare the string just you've been input
     return bcrypt.checkpw(key1.encode(),key2.encode())
+
+def randStr():
+    key = string.ascii_lowercase
+    return random.choice(key)
 
 def pageLoadTime():
     # initialize the variable start
