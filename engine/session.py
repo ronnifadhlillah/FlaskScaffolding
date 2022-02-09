@@ -1,5 +1,5 @@
-from flask import session,g,redirect,url_for,request
-from engine import init
+from flask import session,g,redirect,url_for,request,make_response
+from engine import init,generateHash,randStr
 from datetime import timedelta
 import functools
 
@@ -31,5 +31,10 @@ def asDict(row):
     return dict
 
 def getCookie():
-    head=request.cookies
+    head=request.cookies.get('name')
     return head
+
+def setCookie():
+    res=make_response(f'')
+    res.set_cookie('name',generateHash(randStr()))
+    return res
