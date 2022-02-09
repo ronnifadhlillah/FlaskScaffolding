@@ -1,5 +1,5 @@
 from flask import g,Blueprint,render_template,session,redirect,request,url_for,flash
-from engine import init,sessionLocal,checkHash,loadCurrentUser,loginRequired,asDict,randStr,generateHash
+from engine import init,sessionLocal,checkHash,loadCurrentUser,loginRequired,asDict,randStr,generateHash,getCookie
 from werkzeug.exceptions import abort
 from apps.users_model import Users
 import datetime
@@ -46,7 +46,3 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for("auth.login"))
-
-# @bp.before_app_request
-# def sessionLoader():
-#     loadCurrentUser()

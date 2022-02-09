@@ -22,7 +22,7 @@ def jGlobal():
         hook('flask_v', flask.__version__),
         hook('scaffolding_v', engine.__version__),
         hook('pl',pageLoadTime()),
-
+        hook('cookie',engine.getCookie()),
         # add here for more hook
     )
     return arr

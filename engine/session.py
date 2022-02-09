@@ -1,4 +1,4 @@
-from flask import session,g,redirect,url_for
+from flask import session,g,redirect,url_for,request
 from engine import init
 from datetime import timedelta
 import functools
@@ -29,3 +29,7 @@ def loginRequired(view):
 def asDict(row):
     dict = {column: str(getattr(row, column)) for column in row.__table__.c.keys()}
     return dict
+
+def getCookie():
+    head=request.cookies
+    return head

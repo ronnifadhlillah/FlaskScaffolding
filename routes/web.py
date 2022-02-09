@@ -13,7 +13,7 @@ apps=init()
 bp=Blueprint('route',__name__)
 
 @bp.route('/')
-# @loginRequired
+@loginRequired
 def index():
     # print(copyPat())
     # Write down query and route to page
