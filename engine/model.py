@@ -42,12 +42,12 @@ def timeStampToStr(ts,format='%d/%m/%Y %H:%M:%S'):
         return ""
     return epoch.strftime(format)
 
-def generate_hash(key):
+def generateHash(key):
     salting=bcrypt.gensalt()
     hash=bcrypt.hashpw(key.encode(),salting)
     return hash
 
-def check_hash(key1,key2):
+def checkHash(key1,key2):
     # compare the string just you've been input
     return bcrypt.checkpw(key1.encode(),key2.encode())
 

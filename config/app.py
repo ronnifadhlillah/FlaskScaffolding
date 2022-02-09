@@ -17,6 +17,3 @@
   Template=views
   Static=Public
   Router=Route
-
-[Auth]
-  ExpireIn=60

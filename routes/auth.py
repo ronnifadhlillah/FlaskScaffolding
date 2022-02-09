@@ -1,6 +1,5 @@
 from flask import g,Blueprint,render_template,session,redirect,request,url_for,flash
-from sqlalchemy import text
-from engine import init,sessionLocal,check_hash,load_current_user,login_required,asDict,randStr,generate_hash
+from engine import init,sessionLocal,checkHash,loadCurrentUser,loginRequired,asDict,randStr,generateHash
 from werkzeug.exceptions import abort
 from apps.users_model import Users
 import datetime
@@ -15,9 +14,9 @@ def makesure(req):
     q=sessionLocal.query(Users).filter_by(username=req['un'])
     sql=q.first()
     # User found and password compare logic.
-    if sql is not None and check_hash(req['pass'],sql.password) is not False:
+    if sql is not None and checkHash(req['pass'],sql.password) is not False:
         # Build a session
-        session['token']=generate_hash(randStr())
+        session['token']=generateHash(randStr())
         session['logged_in']=True
         row=q.all()[0]
         rad=asDict(row)
@@ -43,11 +42,11 @@ def login():
         flash(error)
     return render_template("auth.jinja")
 
-@bp.before_app_request
-def session_loader():
-    load_current_user()
-
 @bp.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("auth.login"))
+
+# @bp.before_app_request
+# def sessionLoader():
+#     loadCurrentUser()

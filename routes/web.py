@@ -1,6 +1,5 @@
 from flask import g,Blueprint,render_template,session,request
-from engine import sessionLocal,init,copyPat
-from routes.auth import login_required
+from engine import sessionLocal,init,copyPat,loginRequired
 from apps.sample_model import MockData
 from werkzeug.exceptions import abort
 from sqlalchemy import desc,asc
@@ -14,14 +13,14 @@ apps=init()
 bp=Blueprint('route',__name__)
 
 @bp.route('/')
-@login_required
+# @loginRequired
 def index():
-    print(copyPat())
+    # print(copyPat())
     # Write down query and route to page
     return render_template('index.jinja')
 
 @bp.route('/home')
-@login_required
+@loginRequired
 def home():
-    print(copyPat())
+    # print(copyPat())
     return render_template('home.jinja')

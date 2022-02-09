@@ -1,11 +1,9 @@
 from flask import Flask,render_template,request,session
-import datetime
+from datetime import datetime,timedelta
 import engine
-import requests
 import routes
 import configparser
 import werkzeug
-import logging
 
 cfg=configparser.ConfigParser()
 cfg.read("config/app.py")
@@ -16,15 +14,27 @@ def init(test_config=None):
     static_folder=cfg['BootStrap']['Static'],
     instance_relative_config=True)
 
+# Build function is a whole body of the framework. Every part is connect or linked to this function.
 def build():
+    # First Initialize
     a=init()
+
+    # Before
     beforeReq(a)
-    connector=engine.defineDriver()
+
+    # Database Connector
+    engine.defineDriver()
+
+    # Jinja Properties
     jp(a)
+
+    # Error handler
     handling_error(a)
+
     # General routes / Routes for all
     w=routes.web
     a.register_blueprint(w.bp)
+
     return a
 
 def beforeReq(a):
@@ -36,9 +46,16 @@ def beforeReq(a):
             a.jinja_env.globals[jg['key']]=jg['value']
 
     @a.before_request
-    def sessArray():
-        for k,v in session.items():
-            a.jinja_env.globals[k]=v
+    def sessionLifetime():
+        engine.sessionLifetime(a)
+
+    @a.before_request
+    def parsingUserSession():
+        engine.parsingUserSession(a)
+
+    @a.before_request
+    def sessionLoader():
+        engine.loadCurrentUser()
 
 def jp(a):
     if cfg['Application']['Debug']=="True":
