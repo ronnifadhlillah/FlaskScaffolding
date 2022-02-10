@@ -1,6 +1,6 @@
 from flask import session,g,redirect,url_for,request,make_response
 from engine import init,generateHash,randStr
-from datetime import timedelta
+from datetime import datetime,timedelta
 import functools
 
 def loadCurrentUser():
@@ -38,3 +38,7 @@ def setCookie():
     res=make_response(f'')
     res.set_cookie('name',generateHash(randStr()))
     return res
+
+def getUserAgent():
+    ua=request.user_agent
+    return ua
