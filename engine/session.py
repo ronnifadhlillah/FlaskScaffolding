@@ -3,6 +3,9 @@ from engine import init,generateHash,randStr
 from datetime import datetime,timedelta
 import functools
 
+def token():
+    return generateHash(randStr())
+
 def loadCurrentUser():
     token=session.get("token")
     if token is None:
