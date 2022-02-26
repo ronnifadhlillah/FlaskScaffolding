@@ -16,10 +16,9 @@ def makesure(req):
     # User found and password compare logic.
     if sql is not None and checkHash(req['pass'],sql.password) is not False:
         # Build a session
-        session['token']=request.cookies.get('name')
-        # print(request.cookies.get['name'])
-        session['cookie']=request.cookies.get('name')
-        # session['cookie']=cookie
+        ct=request.cookies.get('name')
+        session['token']=ct
+        session['cookie']=ct
         session['logged_in']=True
         row=q.all()[0]
         rad=asDict(row)
