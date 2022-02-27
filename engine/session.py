@@ -37,11 +37,6 @@ def getCookie():
     head=request.cookies.get('name')
     return head
 
-def setCookie():
-    res=make_response(f'')
-    res.set_cookie('name',generateHash(randStr()))
-    return res
-
 def getUserAgent():
     ua=request.user_agent
     return ua

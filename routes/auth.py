@@ -1,5 +1,5 @@
 from flask import g,Blueprint,render_template,session,redirect,request,url_for,flash,make_response
-from engine import init,sessionLocal,checkHash,loadCurrentUser,loginRequired,asDict,randStr,generateHash,token
+from engine import init,sessionLocal,checkHash,loadCurrentUser,loginRequired,asDict,randStr,generateHash,token,getCookie
 from werkzeug.exceptions import abort
 from apps.users_model import Users
 import datetime
@@ -16,9 +16,7 @@ def makesure(req):
     # User found and password compare logic.
     if sql is not None and checkHash(req['pass'],sql.password) is not False:
         # Build a session
-        ct=request.cookies.get('name')
-        session['token']=ct
-        session['cookie']=ct
+        session['token']=token()
         session['logged_in']=True
         row=q.all()[0]
         rad=asDict(row)
