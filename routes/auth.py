@@ -37,8 +37,11 @@ def login():
         }
         error=None
         if makesure(authReq) is not None:
+
+            # Handling if user found
+
             res=make_response(redirect(url_for('route.index')))
-            res.set_cookie('name',token())
+            res.set_cookie('token',token())
             return res
         error='Check username and password'
         flash(error)
@@ -47,4 +50,5 @@ def login():
 @bp.route("/logout")
 def logout():
     session.clear()
+    # session.pop('token')
     return redirect(url_for("auth.login"))

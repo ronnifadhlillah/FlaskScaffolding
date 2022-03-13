@@ -15,7 +15,7 @@ def loadCurrentUser():
 
 def sessionLifetime(a):
     session.lifetime=True
-    a.permanent_session_lifetime=timedelta(minutes=1)
+    a.permanent_session_lifetime=timedelta(minutes=60)
 
 def parsingUserSession(a):
     for k,v in session.items():
