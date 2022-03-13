@@ -50,5 +50,5 @@ def login():
 @bp.route("/logout")
 def logout():
     session.clear()
-    # session.pop('token')
+    session.pop('name',None)
     return redirect(url_for("auth.login"))
