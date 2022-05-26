@@ -30,21 +30,22 @@ def makesure(req):
 def login():
     # create sample login
     session.clear()
+    # Do authentiation
     if request.method=='POST':
         authReq={
             'un':request.form['username'],
             'pass':request.form['password']
         }
+
         error=None
+
         if makesure(authReq) is not None:
+            return redirect(url_for('route.index'))
 
-            # Handling if user found
-
-            res=make_response(redirect(url_for('route.index')))
-            res.set_cookie('token',token())
-            return res
         error='Check username and password'
-        flash(error)
+
+        flash(error) # or return redirect page
+
     return render_template("auth.jinja")
 
 @bp.route("/logout")
