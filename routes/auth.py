@@ -28,8 +28,10 @@ def makesure(req):
 
 @bp.route("/login", methods=("GET","POST"))
 def login():
+    
     # create sample login
     session.clear()
+
     # Do authentiation
     if request.method=='POST':
         authReq={
