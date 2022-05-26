@@ -40,8 +40,9 @@ def login():
         error=None
 
         if makesure(authReq) is not None:
-            return redirect(url_for('route.index'))
-
+            authenticate=make_response(redirect(url_for('route.index')))
+            authenticate.set_cookie('name',token())
+            return authenticate
         error='Check username and password'
 
         flash(error) # or return redirect page
