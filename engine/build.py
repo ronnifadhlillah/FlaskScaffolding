@@ -86,7 +86,7 @@ def page_not_found(errCode):
   return render_template('errorPage/404.jinja'), 404
 
 def page_bad_request(errCode):
-    return render_template('errorPage400.jinja'), 400
+    return render_template('errorPage/400.jinja'), 400
 
 def page_rto(errCode):
     return render_template('errorPage/408.jinja'), 408

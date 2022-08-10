@@ -15,5 +15,5 @@
 
 [BootStrap]
   Template=views
-  Static=Public
-  Router=Route
+  Static=public
+  Router=route
