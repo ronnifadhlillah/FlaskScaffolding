@@ -77,16 +77,16 @@ def hook(k,v):
     }
     return arr
 
-def handling_error(a):
-    a.register_error_handler(404, page_not_found)
-    a.register_error_handler(400, page_bad_request)
-    a.register_error_handler(400, page_bad_request)
+# def handling_error(a):
+#     a.register_error_handler(404, page_not_found)
+#     a.register_error_handler(400, page_bad_request)
+#     a.register_error_handler(400, page_bad_request)
 
-def page_not_found(errCode):
-  return render_template('errorPage/404.jinja'), 404
+# def page_not_found(errCode):
+#   return render_template('errorPage/404.jinja'), 404
 
-def page_bad_request(errCode):
-    return render_template('errorPage/400.jinja'), 400
+# def page_bad_request(errCode):
+#     return render_template('errorPage/400.jinja'), 400
 
-def page_rto(errCode):
-    return render_template('errorPage/408.jinja'), 408
+# def page_rto(errCode):
+#     return render_template('errorPage/408.jinja'), 408
