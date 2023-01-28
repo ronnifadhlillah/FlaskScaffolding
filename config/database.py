@@ -3,6 +3,10 @@
 # Driver / Database available : SQLite, MySQL, MSSQL, PostgreSQL(Soon).
   Driver=MariaDB
   Prefix=_dbp
+  PoolSize=10
+  MaxOverflow=20
+  AutoCommit=False,
+  AutoFlush=False
 
 [SQLite]
 # SQLite OS available: unix, windows, raw.
@@ -10,6 +14,7 @@
   Driver=SQLite
   OS=windows
   Name=flask_scaffolding
+  CheckSameThread=False,
   PathDirectory=database
 
 [MariaDB]
