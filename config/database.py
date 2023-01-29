@@ -11,11 +11,11 @@
 [SQLite]
 # SQLite OS available: unix, windows, raw.
 # SQLite connect to file based database. define the path / folder of database.
-  Driver=SQLite
+# Database name including path : D://folder//subfolder//database name.db
+Driver=SQLite
   OS=windows
-  Name=flask_scaffolding
-  CheckSameThread=False,
-  PathDirectory=database
+  dbName=flask_scaffolding
+  CheckSameThread=False
 
 [MariaDB]
 # This dialect+driver is full compatible with MySQL.
