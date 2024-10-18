@@ -3,14 +3,19 @@
 # Driver / Database available : SQLite, MySQL, MSSQL, PostgreSQL(Soon).
   Driver=MariaDB
   Prefix=_dbp
+  PoolSize=10
+  MaxOverflow=20
+  AutoCommit=False,
+  AutoFlush=False
 
 [SQLite]
 # SQLite OS available: unix, windows, raw.
 # SQLite connect to file based database. define the path / folder of database.
-  Driver=SQLite
+# Database name including path : D://folder//subfolder//database name.db
+Driver=SQLite
   OS=windows
-  Name=flask_scaffolding
-  PathDirectory=database
+  dbName=flask_scaffolding
+  CheckSameThread=False
 
 [MariaDB]
 # This dialect+driver is full compatible with MySQL.
