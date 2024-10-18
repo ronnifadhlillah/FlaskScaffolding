@@ -1,7 +1,8 @@
 from flask import g,Blueprint,render_template,session,redirect,request,url_for,flash,make_response
 from engine import init,sessionLocal,checkHash,loadCurrentUser,loginRequired,asDict,randStr,generateHash,token,getCookie
 from werkzeug.exceptions import abort
-from apps.users_model import Users
+# from apps.users_model import Users
+from sqlalchemy import text
 import datetime
 import uuid
 
@@ -11,17 +12,25 @@ apps=init()
 bp=Blueprint('auth',__name__)
 
 def makesure(req):
-    q=sessionLocal.query(Users).filter_by(username=req['un'])
-    sql=q.first()
+    # sql=sessionLocal.query(Users).filter_by(username=req['un'])
+    # sql=q.first()
+    sql=sessionLocal.execute(text(f"""
+    SELECT username,password FROM users WHERE username='{req["un"]}'
+    """))
+    exec1=sql.fetchall()
+    columns=sql.keys()
     # User found and password compare logic.
-    if sql is not None and checkHash(req['pass'],sql.password) is not False:
+    if len(exec1)>0 and checkHash(request.form["pass"],exec1[0].password) is not False:
         # Build a session
         session['token']=token()
         session['logged_in']=True
-        row=q.all()[0]
-        rad=asDict(row)
+        rad=[dict(zip(columns,row)) for row in sql]
+
+        print(rad)
         for data in rad:
             session[data]=rad[data]
+
+        sessionLocal.close()
         return True
     else:
         return None
@@ -32,24 +41,40 @@ def login():
     # create sample login
     session.clear()
 
-    # Do authentiation
+    # # Do authentiation
     if request.method=='POST':
-        authReq={
-            'un':request.form['username'],
-            'pass':request.form['password']
-        }
+        sql=sessionLocal.execute(text(f"""
+        SELECT * FROM users WHERE username='{request.form['username']}'
+        """))
+        exec1=sql.fetchall()
+        columns=sql.keys()
+        # User found and password compare logic.
+        if len(exec1)>0 and checkHash(request.form["password"],exec1[0].password) ==True:
+            # Build a session
+            session['token']=token()
+            session['logged_in']=True
+            rad=[dict(zip(columns,row)) for row in exec1]
 
-        error=None
+            for data in rad[0]:
+                session[data]=rad[0][data]
 
-        if makesure(authReq) is not None:
-            authenticate=make_response(redirect(url_for('route.index')))
-            authenticate.set_cookie('name',token())
-            return authenticate
+                sessionLocal.close()
+            sessionLocal.close()
+            return redirect(url_for('route.index'))
         error='Check username and password'
 
         flash(error) # or return redirect page
 
     return render_template("auth.jinja")
+
+
+        # error=None
+
+        # if makesure(authReq) is not None:
+        #     authenticate=make_response(redirect(url_for('route.index')))
+        #     authenticate.set_cookie('name',token())
+        #     return authenticate
+        # error='Check username and password'
 
 @bp.route("/logout")
 def logout():

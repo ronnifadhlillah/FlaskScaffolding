@@ -50,10 +50,6 @@ def beforeReq(a):
         engine.sessionLifetime(a)
 
     @a.before_request
-    def parsingUserSession():
-        engine.parsingUserSession(a)
-
-    @a.before_request
     def sessionLoader():
         engine.loadCurrentUser()
 

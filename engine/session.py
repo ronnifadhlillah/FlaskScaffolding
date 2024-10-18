@@ -1,6 +1,7 @@
 from flask import session,g,redirect,url_for,request,make_response
-from engine import init,generateHash,randStr
+from engine import init,generateHash,randStr,sessionLocal
 from datetime import datetime,timedelta
+from sqlalchemy import text
 import functools
 
 def token():
@@ -17,10 +18,6 @@ def sessionLifetime(a):
     session.lifetime=True
     a.permanent_session_lifetime=timedelta(minutes=60)
 
-def parsingUserSession(a):
-    for k,v in session.items():
-        a.jinja_env.globals[k]=v
-
 def loginRequired(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
@@ -28,6 +25,18 @@ def loginRequired(view):
             return redirect(url_for("auth.login"))
         return view(**kwargs)
     return wrapped_view
+
+def roles(view):
+    @functools.wraps(view)
+    def rolesFunction(**kwargs):
+        sql=sessionLocal.execute(text(f"""
+        SELECT * FROM roles_assign WHERE loginId={g.id}
+        """)).fetchall()
+        roles=[]
+        for r in sql:
+            roles.append(r.rolesId)
+        return view(**kwargs)
+    return rolesFunction
 
 def asDict(row):
     dict = {column: str(getattr(row, column)) for column in row.__table__.c.keys()}

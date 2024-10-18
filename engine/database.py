@@ -10,10 +10,10 @@ cfg.read('config/database.py')
 # Currently working in MariaDB / MySQL driver only
 
 def defineDriver():
-    dd=cfg['Database']['Driver']
-    if dd !='SQLite':
-        el=generalEngine(dd,cfg[dd]['Adaptor'],cfg[dd]['Dialect'])
-        return el
+    # Database connector example
+    set='mariadb+mariadbconnector://root@localhost/test'
+    return set
+
 
 def generalEngine(driver,adaptor,dialect):
     set=dialect+'+'+adaptor+'://'+cfg[driver]['Username']+':'+cfg[driver]['Password']+'@'+cfg[driver]['Host']+'/'+cfg[driver]['Name']
