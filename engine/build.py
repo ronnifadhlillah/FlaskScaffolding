@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,session
+from flask import Flask,render_template,request,session,g
 from datetime import datetime,timedelta
 import engine
 import routes
@@ -28,12 +28,9 @@ def build():
     # Jinja Properties
     jp(a)
 
-    # Error handler
-    handling_error(a)
+    # # Error handler
+    # handling_error(a)
 
-    # General routes / Routes for all
-    w=routes.web
-    a.register_blueprint(w.bp)
 
     return a
 
@@ -49,9 +46,17 @@ def beforeReq(a):
     def sessionLifetime():
         engine.sessionLifetime(a)
 
+    # @a.before_request
+    # def sessionLoader():
+    #     engine.loadCurrentUser()
+
     @a.before_request
-    def sessionLoader():
-        engine.loadCurrentUser()
+    def load_logged_in_user():
+        userName=session.get('id')
+        if userName is None:
+            g.id=None
+        else:
+            g.id=userName
 
 def jp(a):
     if cfg['Application']['Debug']=="True":

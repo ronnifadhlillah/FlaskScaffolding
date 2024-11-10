@@ -7,36 +7,43 @@ import functools
 def token():
     return generateHash(randStr())
 
-def loadCurrentUser():
-    token=session.get("token")
-    if token is None:
-        g.token=None
-    else:
-        g.token=token
+# def loadCurrentUser():
+#     token=session.get("token")
+#     if token is None:
+#         g.token=None
+#     else:
+#         g.token=token
 
 def sessionLifetime(a):
     session.lifetime=True
     a.permanent_session_lifetime=timedelta(minutes=60)
 
+# SESSION MIDDLEWARE
+
 def loginRequired(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if g.token is None:
+        if g.id is None:
             return redirect(url_for("auth.login"))
         return view(**kwargs)
     return wrapped_view
 
-def roles(view):
-    @functools.wraps(view)
-    def rolesFunction(**kwargs):
-        sql=sessionLocal.execute(text(f"""
-        SELECT * FROM roles_assign WHERE loginId={g.id}
-        """)).fetchall()
-        roles=[]
-        for r in sql:
-            roles.append(r.rolesId)
-        return view(**kwargs)
-    return rolesFunction
+def roles(perm=None):
+    def decorator(view):
+        @functools.wraps(view)
+        def rolesFunction(**kwargs):
+            sql=sessionLocal.execute(text(f"""
+            SELECT * FROM roles_assign WHERE loginId={g.id}
+            """)).fetchall()
+            roles=[]
+            for r in sql:
+                roles.append(r.rolesId)
+
+            if all(i not in roles for i in perm):
+                return 'Error 404',404
+            return view(**kwargs)
+        return rolesFunction
+    return decorator
 
 def asDict(row):
     dict = {column: str(getattr(row, column)) for column in row.__table__.c.keys()}
