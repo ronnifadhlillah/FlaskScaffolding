@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,session,g
+from flask import Flask,render_template,request,session,g,redirect,url_for,session
 from datetime import datetime,timedelta
 import engine
 import routes
@@ -52,6 +52,11 @@ def beforeReq(a):
 
     @a.before_request
     def load_logged_in_user():
+        # for k,v in session.items():
+        #     if v is None:
+        #         session.clear()
+        #         return redirect(url_for("auth.logout"))
+        #         break
         userName=session.get('id')
         if userName is None:
             g.id=None

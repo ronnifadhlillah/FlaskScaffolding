@@ -1,5 +1,5 @@
 from flask import g,Blueprint,render_template,session,request
-from engine import sessionLocal,init,copyPat,loginRequired
+from engine import sessionLocal,init,copyPat,loginRequired,roles
 from apps.sample_model import MockData
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
@@ -10,6 +10,7 @@ import os
 # If you're not use build in authentication, you can comment "@login_required".
 # There's maybe have an error if you're not commented.
 # Login & logout page maybe un-available. You can built in manually with different name.
+
 
 apps=init()
 bp=Blueprint('route',__name__)
@@ -27,12 +28,24 @@ def home():
     # print(copyPat())
     return render_template('home.jinja')
 
-@bp.route('/upload',methods=['GET','POST'])
-def upload():
-    if request.method=='POST':
-        pict=request.files['file']
-        filename=secure_filename(pict.filename)
-        pict.save(os.path.join(os.getcwd(),filename))
-        return '',204
+@bp.route('/p1')
+@loginRequired
+@roles(['1'])
+def p1():
+    return "Page 1"
 
-    return render_template('upload.jinja')
+@bp.route('/p2')
+@loginRequired
+@roles(["1","2"])
+def p2():
+    return "Page 2"
+
+# @bp.route('/upload',methods=['GET','POST'])
+# def upload():
+#     if request.method=='POST':
+#         pict=request.files['file']
+#         filename=secure_filename(pict.filename)
+#         pict.save(os.path.join(os.getcwd(),filename))
+#         return '',204
+
+#     return render_template('upload.jinja')

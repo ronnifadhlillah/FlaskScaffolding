@@ -1,5 +1,5 @@
 from flask import g,Blueprint,render_template,session,redirect,request,url_for,flash,make_response
-from engine import init,sessionLocal,checkHash,loadCurrentUser,loginRequired,asDict,randStr,generateHash,token,getCookie
+from engine import init,sessionLocal,checkHash,loginRequired,asDict,randStr,generateHash,token,getCookie
 from werkzeug.exceptions import abort
 # from apps.users_model import Users
 from sqlalchemy import text
@@ -25,8 +25,6 @@ def makesure(req):
         session['token']=token()
         session['logged_in']=True
         rad=[dict(zip(columns,row)) for row in sql]
-
-        print(rad)
         for data in rad:
             session[data]=rad[data]
 
@@ -50,6 +48,9 @@ def login():
         columns=sql.keys()
         # User found and password compare logic.
         if len(exec1)>0 and checkHash(request.form["password"],exec1[0].password) ==True:
+            sql2=sessionLocal.execute(text(f"""
+            SELECT * FROM roles_assign WHERE loginId={exec1[0].id}
+            """)).fetchall()
             # Build a session
             session['token']=token()
             session['logged_in']=True
@@ -57,8 +58,9 @@ def login():
 
             for data in rad[0]:
                 session[data]=rad[0][data]
+            for rolesData in sql2:
+                session[rolesData.rolesId]=rolesData.rolesId
 
-                sessionLocal.close()
             sessionLocal.close()
             return redirect(url_for('route.index'))
         error='Check username and password'

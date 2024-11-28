@@ -23,7 +23,8 @@ def sessionLifetime(a):
 def loginRequired(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if g.id is None:
+        if g.id is None or bool(session.items())==False:
+            session.clear()
             return redirect(url_for("auth.login"))
         return view(**kwargs)
     return wrapped_view
