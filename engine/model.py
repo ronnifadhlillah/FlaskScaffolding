@@ -9,6 +9,7 @@ import time
 import random
 import string
 import decimal
+import locale
 import numpy as np
 
 # initialize engine module in model
@@ -34,20 +35,7 @@ class JSONEncoder(json.JSONEncoder):
       return float(obj)
     elif isinstance(obj, np.ndarray):
       return obj.tolist()
-    return super(CustomJSONEncoder, self).default(obj)
-
-def nowInTimestamp():
-    cur=datetime.now()
-    strftime=cur.strftime('%Y-%m-%d %H:%M:%S')
-    epochCon=datetime.timestamp(strftime)
-    return epochCon
-
-@a.template_filter('epochConvert')
-def timeStampToStr(ts,format='%d/%m/%Y %H:%M:%S'):
-    epoch=datetime.datetime.fromtimestamp(int(ts))
-    if ts is None:
-        return ""
-    return epoch.strftime(format)
+    return super(JSONEncoder, self).default(obj)
 
 def generateHash(key):
     salting=bcrypt.gensalt()
@@ -86,3 +74,45 @@ def copyPat():
     apps=init()
     with apps.app_context():
         return request.url
+
+
+def nowInTimestamp():
+  cur=datetime.now()
+  strftime=cur.strftime('%Y-%m-%d %H:%M:%S')
+  epochCon=datetime.timestamp(strftime)
+  return epochCon
+
+@a.template_filter('epochConvertAll')
+def epochConvertAll(ts,format='%d/%m/%Y %H:%M:%S'):
+  epoch=datetime.datetime.fromtimestamp(int(ts))
+  if ts is None:
+    return ""
+  return epoch.strftime(format)
+
+@a.template_filter('epochConvert')
+def epochConvertAll(ts,format='%d/%m/%Y'):
+  epoch=datetime.datetime.fromtimestamp(int(ts))
+  if ts is None:
+    return ""
+  return epoch.strftime(format)
+
+# Currency using en-US format (e.g 2,000,000.98)
+@a.template_filter("currency")
+def localeCurrency(number):
+  # SCRIPT BEFORE
+  # locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+  # formatted_price = locale.format_string("%d", number, grouping=True)
+  # formatPrice="{:.0f}".format(number)
+  # return formatted_price
+  if number==None:
+    return ""
+  try:
+    locale.setlocale(locale.LC_ALL,"en_US.UTF-8")
+  except locale.error:
+    locale.setlocale(locale.LC_ALL,"C")
+  val=float(number)
+  if val.is_integer():
+    return locale.format_string("d",int(val),grouping=True)
+  else:
+    formatted=locale.format_string("%.2f",val,grouping=True)
+    return formatted.rstrip("0").rstrip(".")
