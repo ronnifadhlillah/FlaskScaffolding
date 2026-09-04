@@ -1,42 +1,40 @@
 from sqlalchemy.ext.declarative import DeclarativeMeta,declarative_base
+from sqlalchemy.engine import Row
 from flask import request
-from datetime import datetime
+from datetime import datetime,date,timedelta
 from engine import init
 import json
 import bcrypt
 import time
 import random
 import string
+import decimal
+import numpy as np
 
 # initialize engine module in model
 a=init()
 
 # Like mixer this file is contain everything that you want to write.
 # This code below is a stimulous of JSON encoder if you see an error JSON seriazible.
-class encoder(json.JSONEncoder):
-    def encoder_p_0(self, obj):
-        if isinstance(obj.__class__, DeclarativeMeta):
-            # an SQLAlchemy class
-            fields = {}
-            for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
-                data = obj.__getattribute__(field)
-                try:
-                    json.dumps(data) # this will fail on non-encodable values, like other classes
-                    fields[field] = data
-                except TypeError:
-                    fields[field] = None
-            # a json-encodable dict
-            return fields
-        return json.JSONEncoder.default(self, obj)
-
-class DecimalEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, decimal.Decimal):
-            # wanted a simple yield str(o) in the next line,
-            # but that would mean a yield on the line with super(...),
-            # which wouldn't work (see my comment below), so...
-            return (str(o) for o in [o])
-        return super(DecimalEncoder, self).default(o)
+class JSONEncoder(json.JSONEncoder):
+  def default(self, obj):
+    if isinstance(obj, datetime):
+      return obj.isoformat()  
+    elif isinstance(obj, decimal.Decimal):
+      return float(obj)  
+    elif isinstance(obj, date):
+      return obj.isoformat()  
+    elif isinstance(obj, Row):
+      return dict(obj)
+    elif isinstance(obj, timedelta):
+      return str(obj)
+    elif isinstance(obj, np.integer):
+      return int(obj)
+    elif isinstance(obj, np.floating):
+      return float(obj)
+    elif isinstance(obj, np.ndarray):
+      return obj.tolist()
+    return super(CustomJSONEncoder, self).default(obj)
 
 def nowInTimestamp():
     cur=datetime.now()

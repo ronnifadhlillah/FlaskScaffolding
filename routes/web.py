@@ -3,7 +3,7 @@ from engine import sessionLocal,init,copyPat,loginRequired,roles
 from apps.sample_model import MockData
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
-from sqlalchemy import desc,asc
+from sqlalchemy import desc,asc,text
 import datetime
 import os
 
@@ -39,6 +39,13 @@ def p1():
 @roles(["1","2"])
 def p2():
     return "Page 2"
+
+@bp.route('/insertSample',methods=("GET","POST"))
+@loginRequired
+@roles(['1'])
+def insertSample():
+    if request.method=="POST":
+        return render_template("sample.jinja")
 
 # @bp.route('/upload',methods=['GET','POST'])
 # def upload():
