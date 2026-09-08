@@ -35,6 +35,8 @@ class JSONEncoder(json.JSONEncoder):
       return float(obj)
     elif isinstance(obj, np.ndarray):
       return obj.tolist()
+    elif isinstance(obj,bytes):
+      return str(obj)
     return super(JSONEncoder, self).default(obj)
 
 def generateHash(key):
