@@ -1,4 +1,4 @@
-from flask import Flask,session,g,session
+from flask import Flask,session,g,session,render_template
 import engine
 import routes
 import configparser
@@ -76,3 +76,11 @@ def hook(k,v):
         'value':v
     }
     return arr
+
+def handling_error(a):
+    a.register_error_handler(404, page_not_found)
+
+# Defining error page
+def page_not_found(errCode):
+    return render_template('errorPage/404.jinja'), 404
+

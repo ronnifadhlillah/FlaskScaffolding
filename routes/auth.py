@@ -1,10 +1,7 @@
 from flask import g,Blueprint,render_template,session,redirect,request,url_for,flash,make_response
 from engine import init,sessionLocal,checkHash,loginRequired,asDict,randStr,generateHash,token,getCookie
 from werkzeug.exceptions import abort
-# from apps.users_model import Users
 from sqlalchemy import text
-import datetime
-import uuid
 
 # this file is used to handling login session by default.
 

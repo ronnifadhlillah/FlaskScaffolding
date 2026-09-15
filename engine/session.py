@@ -19,7 +19,7 @@ def sessionLifetime(a):
   a.permanent_session_lifetime=timedelta(minutes=60)
 
 # SESSION MIDDLEWARE
-
+# Login commited
 def loginRequired(view):
   @functools.wraps(view)
   def wrapped_view(**kwargs):
