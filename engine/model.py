@@ -1,4 +1,3 @@
-from sqlalchemy.ext.declarative import DeclarativeMeta,declarative_base
 from sqlalchemy.engine import Row
 from flask import request
 from datetime import datetime,date,timedelta

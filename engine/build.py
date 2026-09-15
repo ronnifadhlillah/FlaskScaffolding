@@ -44,10 +44,6 @@ def beforeReq(a):
     def sessionLifetime():
         engine.sessionLifetime(a)
 
-    # @a.before_request
-    # def sessionLoader():
-    #     engine.loadCurrentUser()
-
     @a.before_request
     def load_logged_in_user():
         # for k,v in session.items():

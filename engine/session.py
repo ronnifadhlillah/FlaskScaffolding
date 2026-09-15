@@ -1,4 +1,4 @@
-from flask import session,g,redirect,url_for,request,make_response
+from flask import session,g,redirect,url_for,request
 from engine import generateHash,randStr,sessionLocal
 from datetime import timedelta
 from sqlalchemy import text

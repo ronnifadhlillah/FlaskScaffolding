@@ -1,8 +1,5 @@
-from engine import init,hook,pageLoadTime
-import flask
-import socket
+from engine import init,hook
 import configparser
-import engine
 
 cfg=configparser.ConfigParser()
 cfg.read('config/app.py')
@@ -18,11 +15,6 @@ a=init()
 def jGlobal():
     arr=(
         hook('Locale', cfg['Application']['Locale']),
-        hook('host', socket.gethostname()),
-        hook('flask_v', flask.__version__),
-        hook('scaffolding_v', engine.__version__),
-        hook('pl',pageLoadTime()),
-        hook('cookie',engine.getCookie()),
         # add here for more hook
     )
     return arr
