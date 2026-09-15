@@ -1,4 +1,4 @@
-from flask import Flask,session,g,redirect,url_for,session
+from flask import Flask,session,g,session
 import engine
 import routes
 import configparser
@@ -35,7 +35,7 @@ def build():
 def beforeReq(a):
     @a.before_request
     def bt():
-        g=routes.jGlobal()
+        g=engine.jGlobal()
         jgp=g
         for jg in jgp:
             a.jinja_env.globals[jg['key']]=jg['value']
