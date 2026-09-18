@@ -10,6 +10,7 @@ import string
 import decimal
 import locale
 import numpy as np
+import uuid
 
 # initialize engine module in model
 a=init()
@@ -47,9 +48,13 @@ def checkHash(key1,key2):
     # compare the string just you've been input
     return bcrypt.checkpw(key1.encode(),key2.encode())
 
-def randStr():
+def randStr(prefix):
     key = string.ascii_lowercase
-    return random.choice(key)
+    return prefix+random.choice(key)
+
+def randNumb(prefix):
+    num=random.randint(1000000,9999999)
+    return prefix+str(num)
 
 def pageLoadTime():
     # initialize the variable start
@@ -72,10 +77,9 @@ def pageLoadTime():
     return pl
 
 def copyPat():
-    apps=init()
-    with apps.app_context():
-        return request.url
-
+  apps=init()
+  with apps.app_context():
+      return request.url
 
 def nowInTimestamp():
   cur=datetime.now()
@@ -91,7 +95,7 @@ def epochConvertAll(ts,format='%d/%m/%Y %H:%M:%S'):
   return epoch.strftime(format)
 
 @a.template_filter('epochConvert')
-def epochConvertAll(ts,format='%d/%m/%Y'):
+def epochConvert(ts,format='%d/%m/%Y'):
   epoch=datetime.datetime.fromtimestamp(int(ts))
   if ts is None:
     return ""
@@ -100,7 +104,7 @@ def epochConvertAll(ts,format='%d/%m/%Y'):
 # Currency using en-US format (e.g 2,000,000.98)
 @a.template_filter("currency")
 def localeCurrency(number):
-  # SCRIPT BEFORE
+  # Old script below
   # locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
   # formatted_price = locale.format_string("%d", number, grouping=True)
   # formatPrice="{:.0f}".format(number)
@@ -117,3 +121,8 @@ def localeCurrency(number):
   else:
     formatted=locale.format_string("%.2f",val,grouping=True)
     return formatted.rstrip("0").rstrip(".")
+
+def makeUKeys(prefix):
+  uid=uuid.uuid4().hex
+  return prefix+uid
+  
