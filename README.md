@@ -1,2 +1,2 @@
 # FlaskScaffolding
- Basic web scaffold to build the web (flask development)
+Flask research for private purposes.
