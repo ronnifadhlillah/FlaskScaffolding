@@ -57,6 +57,10 @@ def beforeReq(a):
         else:
             g.id=userName
 
+# ================================================================
+# Registering model / route below
+
+
 def jp(a):
     if cfg['Application']['Debug']=="True":
         bool=True
