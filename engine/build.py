@@ -1,5 +1,7 @@
-from flask import Flask,session,g,session,render_template
-import engine
+from flask import Flask,session,g,render_template
+from engine.database import defineDriver
+from engine.hooker import jGlobal
+from engine.model import epochConvert,epochConvertAll
 import configparser
 from datetime import datetime,timedelta
 
@@ -17,7 +19,7 @@ def init(test_config=None):
 def build():
     a=init()
     beforeReq(a)
-    engine.defineDriver()
+    defineDriver()
     jp(a)
     handling_error(a)
 
@@ -29,38 +31,39 @@ def build():
       else:
         g.id=username
 
-    a.jinja_env.filters["epochConvert"]=model.epochConvert
+    a.jinja_env.filters["epochConvert"]=epochConvert
+    a.jinja_env.filters["epochConvertAll"]=epochConvertAll
         
     return a
 
 def beforeReq(a):
     @a.before_request
     def bt():
-        g=engine.jGlobal()
+        g=jGlobal()
         jgp=g
         for jg in jgp:
             a.jinja_env.globals[jg['key']]=jg['value']
 
-    @a.before_request
-    def sessionLifetime():
-      engine.sessionLifetime(a)
-      # a.permanent_session_lifetime=datetime.timedelta(minutes=cfg["Application"]["lifetime"])
+    # @a.before_request
+    # def sessionLifetime():
+    #   session.sessionLifetime(a)
+    #   a.permanent_session_lifetime=datetime.timedelta(minutes=cfg["Application"]["lifetime"])
 
-    @a.before_request
-    def load_logged_in_user():
-        userName=session.get('id')
-        if userName is None:
-            g.id=None
-        else:
-            g.id=userName
+    # @a.before_request
+    # def load_logged_in_user():
+    #     userName=session.get('id')
+    #     if userName is None:
+    #         g.id=None
+    #     else:
+    #         g.id=userName
 
-# ================================================================
-# Registering model / route below
-
-
+# # ================================================================
+# # Registering model / route below
 
 
-# ================================================================
+
+
+# # ================================================================
 def jp(a):
     if cfg['Application']['Debug']=="True":
         bool=True
@@ -73,13 +76,6 @@ def jp(a):
     a.jinja_env.auto_reload=bool
     if cfg['URI']['Set']=="True":
         a.config['SERVER_NAME']=cfg['URI']['Url']+':'+cfg['URI']['Port']
-
-def hook(k,v):
-    arr={
-        'key':k,
-        'value':v
-    }
-    return arr
 
 def handling_error(a):
     a.register_error_handler(404, page_not_found)
