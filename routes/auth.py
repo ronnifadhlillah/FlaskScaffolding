@@ -45,9 +45,9 @@ def login():
         columns=sql.keys()
         # User found and password compare logic.
         if len(exec1)>0 and checkHash(request.form["password"],exec1[0].password) ==True:
-            sql2=sessionLocal.execute(text(f"""
-            SELECT * FROM roles_assign WHERE loginId={exec1[0].id}
-            """)).fetchall()
+            # sql2=sessionLocal.execute(text(f"""
+            # SELECT * FROM roles_assign WHERE loginId={exec1[0].id}
+            # """)).fetchall()
             # Build a session
             session['token']=token()
             session['logged_in']=True
@@ -55,8 +55,8 @@ def login():
 
             for data in rad[0]:
                 session[data]=rad[0][data]
-            for rolesData in sql2:
-                session[rolesData.rolesId]=rolesData.rolesId
+            # for rolesData in sql2:
+            #     session[rolesData.rolesId]=rolesData.rolesId
 
             sessionLocal.close()
             return redirect(url_for('route.index'))

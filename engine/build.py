@@ -1,8 +1,8 @@
 from flask import Flask,session,g,session,render_template
 import engine
-import routes
 import configparser
-from datetime import datetime
+from datetime import datetime,timedelta
+
 
 cfg=configparser.ConfigParser()
 cfg.read("config/app.py")
@@ -20,6 +20,17 @@ def build():
     engine.defineDriver()
     jp(a)
     handling_error(a)
+
+    @a.before_request
+    def load_logged_in_user():
+      username=session.get("id")
+      if username is None and "id" not in session:
+        g.id=None
+      else:
+        g.id=username
+
+    a.jinja_env.filters["epochConvert"]=model.epochConvert
+        
     return a
 
 def beforeReq(a):
@@ -33,7 +44,7 @@ def beforeReq(a):
     @a.before_request
     def sessionLifetime():
       engine.sessionLifetime(a)
-      a.permanent_session_lifetime=datetime.timedelta(minutes=cfg["Application"]["lifetime"])
+      # a.permanent_session_lifetime=datetime.timedelta(minutes=cfg["Application"]["lifetime"])
 
     @a.before_request
     def load_logged_in_user():

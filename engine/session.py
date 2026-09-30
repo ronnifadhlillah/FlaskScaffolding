@@ -4,8 +4,9 @@ from datetime import timedelta
 from sqlalchemy import text
 import functools
 
+
 def token():
-    return generateHash(randStr())
+  return generateHash(randStr("webToken"))
 
 def loadCurrentUser():
   token=session.get("token")

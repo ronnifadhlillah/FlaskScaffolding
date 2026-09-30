@@ -1,7 +1,7 @@
 from sqlalchemy.engine import Row
 from flask import request
 from datetime import datetime,date,timedelta
-from engine import init
+from engine.build import init
 import json
 import bcrypt
 import time
@@ -89,14 +89,13 @@ def nowInTimestamp():
 
 @a.template_filter('epochConvertAll')
 def epochConvertAll(ts,format='%d/%m/%Y %H:%M:%S'):
-  epoch=datetime.datetime.fromtimestamp(int(ts))
+  epoch=datetime.fromtimestamp(int(ts))
   if ts is None:
     return ""
   return epoch.strftime(format)
 
-@a.template_filter('epochConvert')
 def epochConvert(ts,format='%d/%m/%Y'):
-  epoch=datetime.datetime.fromtimestamp(int(ts))
+  epoch=datetime.fromtimestamp(int(ts))
   if ts is None:
     return ""
   return epoch.strftime(format)

@@ -4,7 +4,7 @@ from apps.sample_model import MockData
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 from sqlalchemy import desc,asc,text
-import datetime
+from datetime import datetime,timezone
 import os
 
 # If you're not use build in authentication, you can comment "@login_required".
@@ -20,7 +20,8 @@ bp=Blueprint('route',__name__)
 def index():
     # print(copyPat())
     # Write down query and route to page
-    return render_template('index.jinja')
+    date=datetime.now(timezone.utc).timestamp()
+    return render_template('index.jinja',date=date)
 
 @bp.route('/home')
 @loginRequired
