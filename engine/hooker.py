@@ -1,11 +1,10 @@
-from engine import init,hook,pageLoadTime
-import flask
+from flask import Flask
 import socket
 import configparser
-import engine
 
 cfg=configparser.ConfigParser()
 cfg.read('config/app.py')
+a=Flask(__name__)
 
 # Hooker is direct bind without going throught controller.
 # you can directly parsing into view by calling it's 'key'
@@ -13,16 +12,23 @@ cfg.read('config/app.py')
 # hook(key, value) --> Sample
 # Calling hook in jinja --> {{key}}
 
-a=init()
+def hook(k,v):
+    arr={
+        'key':k,
+        'value':v
+    }
+    return arr
+
+# a=init()
 @a.before_request
 def jGlobal():
     arr=(
         hook('Locale', cfg['Application']['Locale']),
         hook('host', socket.gethostname()),
         hook('flask_v', flask.__version__),
-        hook('scaffolding_v', engine.__version__),
-        hook('pl',pageLoadTime()),
-        hook('cookie',engine.getCookie()),
+        # hook('scaffolding_v', build.__version__),
+        # hook('pl',build.pageLoadTime()),
+        # hook('cookie',build.getCookie()),
         # add here for more hook
     )
     return arr

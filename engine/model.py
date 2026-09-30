@@ -1,7 +1,6 @@
 from sqlalchemy.engine import Row
-from flask import request
+from flask import request,Flask
 from datetime import datetime,date,timedelta
-from engine import init
 import json
 import bcrypt
 import time
@@ -11,9 +10,12 @@ import decimal
 import locale
 import numpy as np
 import uuid
+import configparser
 
-# initialize engine module in model
-a=init()
+cfg=configparser.ConfigParser()
+cfg.read("config/app.py")
+a=Flask(__name__)
+
 
 # Like mixer this file is contain everything that you want to write.
 # This code below is a stimulous of JSON encoder if you see an error JSON seriazible.
@@ -77,8 +79,7 @@ def pageLoadTime():
     return pl
 
 def copyPat():
-  apps=init()
-  with apps.app_context():
+  with a.app_context():
       return request.url
 
 def nowInTimestamp():
@@ -87,22 +88,21 @@ def nowInTimestamp():
   epochCon=datetime.timestamp(strftime)
   return epochCon
 
-@a.template_filter('epochConvertAll')
+# @a.template_filter('epochConvertAll')
 def epochConvertAll(ts,format='%d/%m/%Y %H:%M:%S'):
-  epoch=datetime.datetime.fromtimestamp(int(ts))
+  epoch=datetime.fromtimestamp(int(ts))
   if ts is None:
     return ""
   return epoch.strftime(format)
 
-@a.template_filter('epochConvert')
 def epochConvert(ts,format='%d/%m/%Y'):
-  epoch=datetime.datetime.fromtimestamp(int(ts))
+  epoch=datetime.fromtimestamp(int(ts))
   if ts is None:
     return ""
   return epoch.strftime(format)
 
 # Currency using en-US format (e.g 2,000,000.98)
-@a.template_filter("currency")
+# @a.template_filter("currency")
 def localeCurrency(number):
   # Old script below
   # locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
