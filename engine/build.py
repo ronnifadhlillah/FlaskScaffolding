@@ -2,6 +2,7 @@ from flask import Flask,session,g,session,render_template
 import engine
 import routes
 import configparser
+from datetime import datetime
 
 cfg=configparser.ConfigParser()
 cfg.read("config/app.py")
@@ -14,22 +15,11 @@ def init(test_config=None):
 
 # Build function is a whole body of the framework. Every part is connect or linked to this function.
 def build():
-    # First Initialize
     a=init()
-
-    # Before
     beforeReq(a)
-
-    # Database Connector
     engine.defineDriver()
-
-    # Jinja Properties
     jp(a)
-
-    # # Error handler
-    # handling_error(a)
-
-
+    handling_error(a)
     return a
 
 def beforeReq(a):
@@ -42,15 +32,11 @@ def beforeReq(a):
 
     @a.before_request
     def sessionLifetime():
-        engine.sessionLifetime(a)
+      engine.sessionLifetime(a)
+      a.permanent_session_lifetime=datetime.timedelta(minutes=cfg["Application"]["lifetime"])
 
     @a.before_request
     def load_logged_in_user():
-        # for k,v in session.items():
-        #     if v is None:
-        #         session.clear()
-        #         return redirect(url_for("auth.logout"))
-        #         break
         userName=session.get('id')
         if userName is None:
             g.id=None
@@ -61,6 +47,9 @@ def beforeReq(a):
 # Registering model / route below
 
 
+
+
+# ================================================================
 def jp(a):
     if cfg['Application']['Debug']=="True":
         bool=True
