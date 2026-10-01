@@ -1,6 +1,9 @@
 import flask
 import socket
 import configparser
+import engine
+from engine.model import epochConvert,epochConvertAll,pageLoadTime
+from engine.session import getCookie
 
 cfg=configparser.ConfigParser()
 cfg.read('config/app.py')
@@ -22,13 +25,20 @@ def hook(k,v):
 # a=init()
 @a.before_request
 def jGlobal():
-    arr=(
-        hook('Locale', cfg['Application']['Locale']),
-        hook('host', socket.gethostname()),
-        hook('flask_v', flask.__version__),
-        # hook('scaffolding_v', build.__version__),
-        # hook('pl',build.pageLoadTime()),
-        # hook('cookie',build.getCookie()),
-        # add here for more hook
-    )
-    return arr
+  arr=(
+    hook('Locale', cfg['Application']['Locale']),
+    hook('host', socket.gethostname()),
+    hook('flask_v', flask.__version__),
+    hook('scaffolding_v', engine.__version__),
+    hook('pl',pageLoadTime()),
+    hook('cookie',getCookie()),
+    # add here for more hook
+  )
+  return arr
+
+def templateFilter():
+  tf={
+    "epochConvert":epochConvert,
+    "epochConvertAll":epochConvertAll
+  }
+  return tf
