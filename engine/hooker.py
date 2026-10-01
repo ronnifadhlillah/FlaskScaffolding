@@ -1,10 +1,10 @@
-from flask import Flask
+import flask
 import socket
 import configparser
 
 cfg=configparser.ConfigParser()
 cfg.read('config/app.py')
-a=Flask(__name__)
+a=flask.Flask(__name__)
 
 # Hooker is direct bind without going throught controller.
 # you can directly parsing into view by calling it's 'key'
