@@ -1,6 +1,6 @@
 from flask import Flask,session,g,render_template
 from engine.database import defineDriver
-from engine.hooker import jGlobal
+from engine.hooker import jGlobal,templateFilter
 from engine.model import epochConvert,epochConvertAll
 import configparser
 from datetime import datetime,timedelta
@@ -31,9 +31,8 @@ def build():
       else:
         g.id=username
 
-    a.jinja_env.filters["epochConvert"]=epochConvert
-    a.jinja_env.filters["epochConvertAll"]=epochConvertAll
-        
+    for b,c in templateFilter().items():
+      a.jinja_env.filters[b]=c
     return a
 
 def beforeReq(a):

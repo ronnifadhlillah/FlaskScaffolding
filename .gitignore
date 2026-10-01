@@ -10,4 +10,3 @@ test.py
 engine/configParse.bak
 *.bak
 *.sql
-/apps/

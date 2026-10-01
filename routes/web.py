@@ -3,7 +3,6 @@ from engine.build import init
 from engine.model import copyPat
 from engine.session import loginRequired,roles
 from engine.database import sessionLocal
-from apps.sample_model import MockData
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 from sqlalchemy import desc,asc,text
@@ -23,8 +22,8 @@ bp=Blueprint('route',__name__)
 def index():
     # print(copyPat())
     # Write down query and route to page
-    date=datetime.now(timezone.utc).timestamp()
-    return render_template('index.jinja',date=date)
+    currentDate=datetime.now(timezone.utc).timestamp()
+    return render_template('index.jinja',currentDate=currentDate)
 
 @bp.route('/home')
 @loginRequired
