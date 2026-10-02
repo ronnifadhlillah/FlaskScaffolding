@@ -1,10 +1,7 @@
 from flask import Flask,session,g,render_template
 from engine.database import defineDriver
 from engine.hooker import jGlobal,templateFilter
-from engine.model import epochConvert,epochConvertAll
 import configparser
-from datetime import datetime,timedelta
-
 
 cfg=configparser.ConfigParser()
 cfg.read("config/app.py")
@@ -42,19 +39,6 @@ def beforeReq(a):
         jgp=g
         for jg in jgp:
             a.jinja_env.globals[jg['key']]=jg['value']
-
-    # @a.before_request
-    # def sessionLifetime():
-    #   session.sessionLifetime(a)
-    #   a.permanent_session_lifetime=datetime.timedelta(minutes=cfg["Application"]["lifetime"])
-
-    # @a.before_request
-    # def load_logged_in_user():
-    #     userName=session.get('id')
-    #     if userName is None:
-    #         g.id=None
-    #     else:
-    #         g.id=userName
 
 # # ================================================================
 # # Registering model / route below

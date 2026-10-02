@@ -2,7 +2,7 @@ import flask
 import socket
 import configparser
 import engine
-from engine.model import epochConvert,epochConvertAll,pageLoadTime
+from engine.model import epochConvert,epochConvertAll,pageLoadTime,locale
 from engine.session import getCookie
 
 cfg=configparser.ConfigParser()
@@ -36,9 +36,11 @@ def jGlobal():
   )
   return arr
 
+# Bind in jinja_env template filter
 def templateFilter():
   tf={
     "epochConvert":epochConvert,
-    "epochConvertAll":epochConvertAll
+    "epochConvertAll":epochConvertAll,
+    "locale":locale,
   }
   return tf
