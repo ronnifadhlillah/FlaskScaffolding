@@ -88,7 +88,6 @@ def nowInTimestamp():
   epochCon=datetime.timestamp(strftime)
   return epochCon
 
-# @a.template_filter('epochConvertAll')
 def epochConvertAll(ts,format='%d/%m/%Y %H:%M:%S'):
   epoch=datetime.fromtimestamp(int(ts))
   if ts is None:
@@ -122,7 +121,10 @@ def localeCurrency(number):
     formatted=locale.format_string("%.2f",val,grouping=True)
     return formatted.rstrip("0").rstrip(".")
 
-def makeUKeys(prefix):
+def makeUKeys(prefix=None):
   uid=uuid.uuid4().hex
-  return prefix+uid
+  if prefix:
+    return prefix+
+  else:
+    return uid
   
