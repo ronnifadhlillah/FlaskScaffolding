@@ -36,7 +36,7 @@ def jGlobal():
   )
   return arr
 
-# Bind in jinja_env template filter
+# Bind for jinja_env template filter
 def templateFilter():
   tf={
     "epochConvert":epochConvert,
