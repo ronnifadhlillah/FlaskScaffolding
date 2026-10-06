@@ -15,7 +15,7 @@ def configure_logging(app):
     file_handler.setFormatter(logging.Formatter(
       '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
     ))
-    file_handler.setLevel(logging.ERROR)
+    file_handler.setLevel(logging.ERROR,logging.WARNING,logging.DEBUG)
 
     app.logger.addHandler(file_handler)
 
