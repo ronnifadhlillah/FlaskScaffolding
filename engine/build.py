@@ -2,6 +2,7 @@ from flask import Flask,session,g,render_template
 from engine.database import defineDriver
 from engine.hooker import jGlobal,templateFilter
 import configparser
+import cron
 
 cfg=configparser.ConfigParser()
 cfg.read("config/app.py")
@@ -19,6 +20,9 @@ def build():
     defineDriver()
     jp(a)
     handling_error(a)
+    # enablingCron
+    cron("Yes")
+    
 
     @a.before_request
     def load_logged_in_user():
