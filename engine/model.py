@@ -124,7 +124,7 @@ def localeCurrency(number):
 def makeUKeys(prefix=None):
   uid=uuid.uuid4().hex
   if prefix:
-    return prefix+
+    return prefix+uid
   else:
     return uid
   
