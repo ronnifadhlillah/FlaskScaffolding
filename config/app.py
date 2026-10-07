@@ -7,6 +7,7 @@
   FallbackLocale=en
   SecretKey=b'\xf3\xacD\x07I\x07d\x05}{\xf5\xa0M6.\x1c\xff?.\x8d\xa2\xbe\xaeW'
   Lifetime=300 # Set as minute
+  Cron="Enabled"
 
 [URI]
 # For development in different port or url

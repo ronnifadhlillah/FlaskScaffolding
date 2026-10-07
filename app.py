@@ -17,4 +17,3 @@ configure_logging(apps)
 
 if __name__=="__main__":
     apps.run()
-

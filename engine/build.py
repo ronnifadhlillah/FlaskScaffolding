@@ -21,7 +21,9 @@ def build():
     jp(a)
     handling_error(a)
     # enablingCron
-    cron("Yes")
+    cron()
+      
+
     
 
     @a.before_request
