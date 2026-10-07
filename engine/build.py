@@ -1,6 +1,7 @@
 from flask import Flask,session,g,render_template
 from engine.database import defineDriver
 from engine.hooker import jGlobal,templateFilter
+import routes
 import configparser
 import cron
 
@@ -22,10 +23,17 @@ def build():
     handling_error(a)
     # enablingCron
     cron()
-      
 
+# ================================================================
+    # Registering model / route below
+    # Registering Blueprint sample
+    aut=routes.auth
+    a.register_blueprint(aut.bp)
+    # General routes / Routes for all
+    w=routes.web
+    a.register_blueprint(w.bp)
+# ================================================================
     
-
     @a.before_request
     def load_logged_in_user():
       username=session.get("id")
@@ -46,13 +54,6 @@ def beforeReq(a):
         for jg in jgp:
             a.jinja_env.globals[jg['key']]=jg['value']
 
-# # ================================================================
-# # Registering model / route below
-
-
-
-
-# # ================================================================
 def jp(a):
     if cfg['Application']['Debug']=="True":
         bool=True

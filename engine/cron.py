@@ -13,9 +13,7 @@ def randomNumber():
 # registering CRON below
 jobs={
   "j1":cron.add_job(randomNumber, 'cron', day_of_week='mon-sun', hour=1, minute=0),
-  "j2":cron.add_job(t1, 'cron', day_of_week='mon-sun', hour=1, minute=0),
-  "j3":cron.add_job(t2, 'cron', day_of_week='mon-sun', hour=1, minute=0),
-  "j4":cron.add_job(t3, 'cron', day_of_week='mon-sun', hour=1, minute=0)
+  # add here for more cron
 }
-
-cron.start()
+if cfg['Application']['cron']=="Enabled":
+  cron.start()
