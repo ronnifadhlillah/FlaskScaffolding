@@ -1,5 +1,4 @@
 from flask import g,Blueprint,render_template,session,request
-# from engine.build import init
 from engine.model import copyPat
 from engine.session import loginRequired,roles
 from engine.database import sessionLocal
@@ -14,7 +13,6 @@ import os
 # Login & logout page maybe un-available. You can built in manually with different name.
 
 
-# apps=init()
 bp=Blueprint('route',__name__)
 
 @bp.route('/')
