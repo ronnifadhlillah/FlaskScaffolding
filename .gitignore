@@ -10,3 +10,4 @@ test.py
 engine/configParse.bak
 *.bak
 *.sql
+FlaskScaffolding.code-workspace

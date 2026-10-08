@@ -3,7 +3,7 @@ from engine.database import defineDriver
 from engine.hooker import jGlobal,templateFilter
 import routes
 import configparser
-import cron
+# import cron
 
 cfg=configparser.ConfigParser()
 cfg.read("config/app.py")
@@ -22,13 +22,15 @@ def build():
     jp(a)
     handling_error(a)
     # enablingCron
-    cron()
+    # cron()
 
 # ================================================================
     # Registering model / route below
     # Registering Blueprint sample
+    
     aut=routes.auth
     a.register_blueprint(aut.bp)
+    
     # General routes / Routes for all
     w=routes.web
     a.register_blueprint(w.bp)
