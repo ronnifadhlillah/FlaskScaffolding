@@ -1,8 +1,10 @@
 from flask import Flask,session,g,render_template
 from engine.database import defineDriver
 from engine.hooker import jGlobal,templateFilter
+from flask_caching import Cache
 import routes
 import configparser
+import os
 # import cron
 
 cfg=configparser.ConfigParser()
@@ -17,6 +19,19 @@ def init(test_config=None):
 # Build function is a whole body of the framework. Every part is connect or linked to this function.
 def build():
     a=init()
+    
+
+    # Cache using filesystem (global config)
+    cache=Cache(config={
+      "DEBUG": True,
+      "CACHE_TYPE": "FileSystemCache",
+      "CACHE_DEFAULT_TIMEOUT": 300,
+      "CACHE_THRESHOLD":700,
+      "CACHE_DIR": os.path.join(os.getcwd(),'public/storage/cache')
+    })
+
+    cache.init_app(a)
+
     beforeReq(a)
     defineDriver()
     jp(a)
