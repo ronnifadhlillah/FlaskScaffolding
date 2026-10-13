@@ -49,6 +49,25 @@ def roles(perm=None):
     return rolesFunction
   return decorator
 
+# CHECKING CACHE
+# If cache switcher is enabled this middleware auto active.
+def cacheMid(app,cache):
+  @app.before_request
+  def check_cache():
+    if request.method == "GET":
+      cache_key = request.path
+      cached_response = cache.get(cache_key)
+        
+      if cached_response is not None:
+        return cached_response
+        
+  @app.after_request
+  def store_cache(response):
+    if request.method == "GET" and response.status_code == 200:
+      cache_key = request.path
+      cache.set(cache_key, response, timeout=60)
+    return response
+
 def asDict(row):
   dict = {column: str(getattr(row, column)) for column in row.__table__.c.keys()}
   return dict
