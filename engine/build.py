@@ -1,6 +1,7 @@
 from flask import Flask,session,g,render_template
 from engine.database import defineDriver
 from engine.hooker import jGlobal,templateFilter
+from engine.session import cacheMid
 from flask_caching import Cache
 import routes
 import configparser
@@ -33,6 +34,8 @@ def build():
       })
 
       cache.init_app(a)
+
+      cacheMid(a,cache)
 
     beforeReq(a)
     defineDriver()
