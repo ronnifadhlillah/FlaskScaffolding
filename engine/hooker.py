@@ -22,7 +22,6 @@ def hook(k,v):
     }
     return arr
 
-# a=init()
 @a.before_request
 def jGlobal():
   arr=(
