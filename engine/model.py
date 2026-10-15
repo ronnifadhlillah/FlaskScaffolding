@@ -11,6 +11,7 @@ import locale
 import numpy as np
 import uuid
 import configparser
+import os
 
 cfg=configparser.ConfigParser()
 cfg.read("config/app.py")
@@ -144,4 +145,9 @@ def makeUKeys(prefix=None):
     return prefix+uid
   else:
     return uid
-  
+
+def createFolderConf(folderName):
+  if not os.path.exists(cfg["Bootstrap"]["Static"]+"/"+str(folderName)):
+    os.mkdir(cfg["Bootstrap"]["Static"]+"/"+str(folderName))
+    return str(folderName)
+  return str(folderName)
