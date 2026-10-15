@@ -28,8 +28,8 @@ def build():
       cache=Cache(config={
         "DEBUG": cfg['Cache']['Debug'],
         "CACHE_TYPE": "FileSystemCache",
-        "CACHE_DEFAULT_TIMEOUT": cfg['Cache']['Timeout'],
-        "CACHE_THRESHOLD":cfg['Cache']['Threshold'],
+        "CACHE_DEFAULT_TIMEOUT": int(cfg['Cache']['Timeout']),
+        "CACHE_THRESHOLD":  int(cfg['Cache']['Threshold']),
         "CACHE_DIR": os.path.join(os.getcwd(),cfg['Cache']['Directory'])
       })
 

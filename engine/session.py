@@ -52,6 +52,7 @@ def roles(perm=None):
 # CHECKING CACHE
 # If cache switcher is enabled this middleware auto active.
 def cacheMid(app,cache):
+  print(cache)
   @app.before_request
   def check_cache():
     if request.method == "GET":
