@@ -100,8 +100,25 @@ def epochConvert(ts,format='%d/%m/%Y'):
     return ""
   return epoch.strftime(format)
 
+#Only date
+def dateInTimestamp(dateString):
+    date=datetime.datetime.strptime(dateString,'%d/%m/%Y')
+    wib = datetime.timezone(datetime.timedelta(hours=7))
+    date = date.replace(tzinfo=wib)
+    utc_time = date.astimezone(datetime.timezone.utc)
+    epochCon = int(utc_time.timestamp())
+    return epochCon
+
+# If datestring using full format
+def dateInTimestampAll(dateString):
+    date=datetime.datetime.strptime(dateString,'%d/%m/%Y %H:%M:%S')
+    wib = datetime.timezone(datetime.timedelta(hours=7))
+    date = date.replace(tzinfo=wib)
+    utc_time = date.astimezone(datetime.timezone.utc)
+    epochCon = int(utc_time.timestamp())
+    return epochCon
+
 # Currency using en-US format (e.g 2,000,000.98)
-# @a.template_filter("currency")
 def localeCurrency(number):
   # Old script below
   # locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
