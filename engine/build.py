@@ -21,20 +21,19 @@ def init(test_config=None):
 def build():
     a=init()
 
-    cacheSwitcher=cfg['Application']['Cache']
+    cacheSwitcher=cfg['Cache']['Enabled']
     if cacheSwitcher=="Enabled":
 
       # Cache using filesystem (global config)
       cache=Cache(config={
-        "DEBUG": True,
+        "DEBUG": cfg['Cache']['Debug'],
         "CACHE_TYPE": "FileSystemCache",
-        "CACHE_DEFAULT_TIMEOUT": 300,
-        "CACHE_THRESHOLD":700,
-        "CACHE_DIR": os.path.join(os.getcwd(),'public/storage/cache')
+        "CACHE_DEFAULT_TIMEOUT": cfg['Cache']['Timeout'],
+        "CACHE_THRESHOLD":cfg['Cache']['Threshold'],
+        "CACHE_DIR": os.path.join(os.getcwd(),cfg['Cache']['Directory'])
       })
 
       cache.init_app(a)
-
       cacheMid(a,cache)
 
     beforeReq(a)
@@ -90,9 +89,17 @@ def jp(a):
         a.config['SERVER_NAME']=cfg['URI']['Url']+':'+cfg['URI']['Port']
 
 def handling_error(a):
+    a.register_error_handler(401, need_login)
+    a.register_error_handler(403, permission)
     a.register_error_handler(404, page_not_found)
 
 # Defining error page
+def need_login(errCode):
+    return render_template('errorPage/404.jinja'), 401
+
+def permission(errCode):
+    return render_template('errorPage/404.jinja'), 403
+
 def page_not_found(errCode):
     return render_template('errorPage/404.jinja'), 404
 
