@@ -63,7 +63,6 @@ def build():
     else:
       g.id=username
       
-  @a.before_request
   def bt():
     g=jGlobal()
     jgp=g
