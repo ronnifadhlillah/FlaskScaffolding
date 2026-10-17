@@ -37,7 +37,6 @@ def build():
     cache.init_app(a)
     cacheMid(a,cache)
 
-  beforeReq(a)
   defineDriver()
   jp(a)
   handling_error(a)
@@ -63,12 +62,7 @@ def build():
       g.id=None
     else:
       g.id=username
-
-  for b,c in templateFilter().items():
-    a.jinja_env.filters[b]=c
-  return a
-
-def beforeReq(a):
+      
   @a.before_request
   def bt():
     g=jGlobal()
@@ -76,6 +70,11 @@ def beforeReq(a):
     for jg in jgp:
       a.jinja_env.globals[jg['key']]=jg['value']
 
+  for b,c in templateFilter().items():
+    a.jinja_env.filters[b]=c
+
+  return a
+  
 def jp(a):
   if cfg['Application']['Debug']=="True":
     bool=True
