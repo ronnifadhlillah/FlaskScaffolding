@@ -26,3 +26,11 @@
   Directory=public/storage/cache
   Threshold=700
   Timeout=300
+
+[Mail]
+  Smtp=test.id
+  Port=465
+  Username=noreply@test.id
+  Password=test1123
+  Masking=Santoso
+
