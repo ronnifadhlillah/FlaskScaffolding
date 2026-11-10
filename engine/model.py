@@ -158,5 +158,5 @@ def uploadFiles(files):
   fn=files.filename
   sfn=secure_filename(fn)
   getFolder=createFolderConf(randNumb+randStr+fn)
-  return fn.save(os.path.join(getFolder,sfn))
+  return files.save(os.path.join(getFolder,sfn))
   
