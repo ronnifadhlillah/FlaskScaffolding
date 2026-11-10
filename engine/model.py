@@ -1,6 +1,7 @@
 from sqlalchemy.engine import Row
 from flask import request,Flask
 from datetime import datetime,date,timedelta
+from werkzeug.utils import secure_filename
 import json
 import bcrypt
 import time
@@ -146,8 +147,16 @@ def makeUKeys(prefix=None):
   else:
     return uid
 
+
 def createFolderConf(folderName):
   if not os.path.exists(cfg["Bootstrap"]["Static"]+"/"+str(folderName)):
     os.mkdir(cfg["Bootstrap"]["Static"]+"/"+str(folderName))
     return str(folderName)
   return str(folderName)
+
+def uploadFiles(files):
+  fn=files.filename
+  sfn=secure_filename(fn)
+  getFolder=createFolderConf(randNumb+randStr+fn)
+  return fn.save(os.path.join(getFolder,sfn))
+  
